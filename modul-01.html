@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 01: Anatomi Dokumen HTML5 | Informatika Kelas 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-alt: #1E293B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.25);
+            --accent-amber: #F59E0B;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 30%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1050px; margin: 0 auto; padding: 1.5rem 1.25rem 5rem 1.25rem; }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .nav-title { font-size: 0.9rem; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
+
+        .complete-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-badge-done { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge-active { background: rgba(56, 189, 248, 0.15); color: #7DD3FC; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .module-header {
+            background: linear-gradient(180deg, rgba(20, 35, 55, 0.6) 0%, rgba(19, 27, 46, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-meta { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .module-title { font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.8rem; line-height: 1.3; }
+        .module-desc { color: #CBD5E1; font-size: 0.95rem; max-width: 850px; }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tab-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #0B0F19;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 { font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-bottom: 1rem; }
+        .content-card h4 { font-size: 1.05rem; font-weight: 700; color: #38BDF8; margin: 1.5rem 0 0.6rem 0; }
+        .content-card p { color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.65; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+        .callout-green { background: rgba(16, 185, 129, 0.08); border-left-color: var(--accent-green); }
+        .callout-amber { background: rgba(245, 158, 11, 0.08); border-left-color: var(--accent-amber); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.2rem 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content-card { padding: 1.25rem; }
+        }
+
+        .sub-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .sub-card-title { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.5rem; }
+        .sub-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; border-radius: 12px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        th { background: rgba(255, 255, 255, 0.04); color: var(--primary); font-weight: 700; }
+        code.inline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #7DD3FC;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A7F3D0;
+        }
+
+        .sandbox-container {
+            background: #0D1322;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .sandbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        @media (max-width: 768px) { .sandbox-grid { grid-template-columns: 1fr; } }
+
+        .code-textarea {
+            width: 100%;
+            height: 250px;
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+        }
+        .code-textarea:focus { border-color: var(--primary); }
+        .preview-iframe {
+            width: 100%;
+            height: 250px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .step-list { list-style: none; counter-reset: step-counter; margin: 1rem 0; }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary);
+        }
+
+        /* Quiz UI */
+        .quiz-progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38BDF8, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .quiz-question { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.8rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quiz-opt {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #CBD5E1;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .quiz-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+        .quiz-opt.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10B981 !important;
+            color: #34D399 !important;
+            font-weight: 700;
+        }
+        .quiz-opt.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #EF4444 !important;
+            color: #F87171 !important;
+        }
+        .quiz-opt:disabled { cursor: not-allowed; opacity: 0.9; }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.12); color: #34D399; border-left: 4px solid #10B981; }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.12); color: #FCA5A5; border-left: 4px solid #EF4444; }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, rgba(20, 35, 60, 0.9), rgba(19, 27, 46, 0.95));
+            border: 1px solid #38BDF8;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .bottom-bar {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-action-primary:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #10B981;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="index.html" class="btn-back">← Kembali ke Roadmap</a>
+            <div class="nav-title">MODUL 01 • FRONT-END FONDASI</div>
+            <div id="moduleStatusBadge" class="complete-status-badge status-badge-active">
+                <span>⚡</span>
+                <span id="statusBadgeText">Sedang Dipelajari</span>
+            </div>
+        </nav>
+
+        <header class="module-header">
+            <div class="module-meta">
+                <span class="tag-pill">Fase F (Kelas 12)</span>
+                <span class="tag-pill" style="background: rgba(16,185,129,0.15); color:#34D399; border-color: rgba(16,185,129,0.3);">⏱️ Pertemuan 1–2 (4 JP)</span>
+                <span class="tag-pill" style="background: rgba(168,85,247,0.15); color:#C084FC; border-color: rgba(168,85,247,0.3);">Proyek Web Supabase</span>
+            </div>
+            <h1 class="module-title">Anatomi Dokumen Web & Tag Semantik HTML5</h1>
+            <p class="module-desc">
+                Pelajari fondasi utama perancangan web: memahami analogi kerangka rumah, menyusun dokumen <code>index.html</code> pertama di teks editor, hingga menguji pemahaman dengan kuis interaktif 10 soal.
+            </p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-analogi', this)">🏠 1. Analogi & Cara Kerja</button>
+            <button class="tab-btn" onclick="switchTab('tab-anatomi', this)">🧬 2. Struktur Wajib HTML5</button>
+            <button class="tab-btn" onclick="switchTab('tab-tag', this)">📝 3. Tag Teks & List</button>
+            <button class="tab-btn" onclick="switchTab('tab-sandbox', this)">🧪 4. Live Sandbox</button>
+            <button class="tab-btn" onclick="switchTab('tab-praktik', this)">🚀 5. Praktik Lab</button>
+            <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🎯 6. Kuis Pemahaman (10 Soal)</button>
+        </div>
+
+        <!-- Tab 1 -->
+        <section id="tab-analogi" class="tab-pane active">
+            <div class="content-card">
+                <h3>🏠 Analogi Sederhana: Website Ibarat Membangun Rumah</h3>
+                <p>Membangun web terintegrasi Supabase memiliki konsep serupa dengan mendirikan rumah tinggal:</p>
+                <div class="grid-3">
+                    <div class="sub-card" style="border-top: 3px solid #38BDF8;">
+                        <div class="sub-card-title">🦴 1. HTML (Kerangka & Bata)</div>
+                        <p><strong>HyperText Markup Language:</strong> Pondasi, susunan bata, dinding, dan sekat ruang. Menentukan letak judul, form, dan tombol.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #10B981;">
+                        <div class="sub-card-title">🎨 2. CSS (Cat & Desain)</div>
+                        <p><strong>Cascading Style Sheets:</strong> Warna tembok, keramik lantai, dan layout ruangan agar tampak estetik dan responsif.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #F59E0B;">
+                        <div class="sub-card-title">⚡ 3. JavaScript (Kelistrikan)</div>
+                        <p><strong>Logic & Behavior:</strong> Saklar lampu otomatis dan kran pintar. Mengatur aksi tombol mengirim data ke cloud database.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2 -->
+        <section id="tab-anatomi" class="tab-pane">
+            <div class="content-card">
+                <h3>🧬 Kerangka Anatomi Wajib Setiap Dokumen HTML5</h3>
+                <p>Semua dokumen web dimulai dengan deklarasi tipe dokumen dan pasangan pembungkus berikut:</p>
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="id"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Judul Halaman di Tab Browser&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Halo, Selamat Datang di Web Kelas 12!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Tab 3 -->
+        <section id="tab-tag" class="tab-pane">
+            <div class="content-card">
+                <h3>📝 Tag Semantik Teks & Daftar List</h3>
+                <div class="grid-2">
+                    <div class="sub-card">
+                        <div class="sub-card-title">📌 Heading (Judul Bertingkat)</div>
+                        <p>Gunakan <code class="inline">&lt;h1&gt;</code> untuk judul paling utama, disusul <code class="inline">&lt;h2&gt;</code> hingga <code class="inline">&lt;h6&gt;</code> untuk sub-judul.</p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">📄 Paragraf & List</div>
+                        <p>Gunakan <code class="inline">&lt;p&gt;</code> untuk paragraf, <code class="inline">&lt;ul&gt;</code> untuk list poin bulat, dan <code class="inline">&lt;ol&gt;</code> untuk list angka berurutan.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4 -->
+        <section id="tab-sandbox" class="tab-pane">
+            <div class="content-card">
+                <h3>🧪 Live Code Sandbox: Uji Coba di Browser</h3>
+                <p>Ubah teks di editor sebelah kiri, lalu klik <strong>"Jalankan Kode ▶"</strong> untuk melihat perubahannya langsung.</p>
+                <div class="sandbox-container">
+                    <div class="sandbox-grid">
+                        <div>
+                            <textarea id="liveCodeEditor" class="code-textarea" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="font-family: sans-serif; padding: 15px;"&gt;
+  &lt;h1 style="color: #0284c7;"&gt;Profil Siswa Kelas 12&lt;/h1&gt;
+  &lt;p&gt;Halo, saya sedang mempelajari rekayasa aplikasi web mandiri!&lt;/p&gt;
+  &lt;hr&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Belajar Tag HTML&lt;/li&gt;
+    &lt;li&gt;Deploy GitHub Pages&lt;/li&gt;
+    &lt;li&gt;Koneksi Supabase Cloud&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                            <button class="btn-run" onclick="runSandboxPreview()">Jalankan Kode ▶</button>
+                        </div>
+                        <div>
+                            <iframe id="livePreviewFrame" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5 -->
+        <section id="tab-praktik" class="tab-pane">
+            <div class="content-card">
+                <h3>🚀 Panduan Praktik Nyata di Komputer Sekolah / Laptop</h3>
+                <ol class="step-list">
+                    <li>Buka aplikasi <strong>VS Code</strong> atau <strong>Notepad</strong> bawaan Windows.</li>
+                    <li>Ketik struktur dokumen lengkap <code class="inline">&lt;!DOCTYPE html&gt;</code>.</li>
+                    <li>Simpan berkas melalui <em>File &rarr; Save As</em> dengan nama persis <strong><code>index.html</code></strong> (pilih <em>Save as type: All Files (*.*)</em>).</li>
+                    <li>Buka folder penyimpanan lalu klik ganda file <code>index.html</code> untuk membukanya di browser.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tab 6: Kuis -->
+        <section id="tab-quiz" class="tab-pane">
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>🎯 Uji Pemahaman: Anatomi Dokumen HTML (10 Soal)</h3>
+                    <div id="quizProgressText" style="font-size: 0.85rem; font-weight: 700; color: #38BDF8;">Dijawab: 0 / 10 Soal</div>
+                </div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressBar"></div>
+                </div>
+                <p style="margin-bottom: 1.5rem;">Pilih satu jawaban yang paling tepat pada masing-masing kartu soal berikut:</p>
+
+                <div id="quizContainer"></div>
+
+                <div class="quiz-score-box" id="quizScoreBox">
+                    <h4 style="font-size: 1.4rem; color: #38BDF8; margin-bottom: 0.4rem;" id="quizScoreTitle">Skor Kamu: 0 / 100</h4>
+                    <p id="quizScoreFeedback" style="color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1.2rem;"></p>
+                    <button class="btn-run" onclick="resetQuiz()">Ulangi Kuis 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-bar">
+            <div>
+                <h4 style="font-size: 1rem; color: #F8FAFC;">Sudah Paham Materi Modul 01?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Tandai modul ini tuntas untuk membuka status Modul 02 di Dashboard.</p>
+            </div>
+            <div>
+                <button class="btn-action-primary" id="btnMarkComplete" onclick="markModuleComplete()">
+                    <span>✅ Tandai Selesai & Buka Modul 02 🚀</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast" id="toastMsg">
+        <span id="toastIcon">🎉</span>
+        <span id="toastText">Status berhasil disimpan!</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const CURRENT_MODULE_ID = 1;
+
+        const quizData = [
+            {
+                q: "1. Apa kepanjangan dari singkatan HTML?",
+                opts: [
+                    "HyperText Markup Language",
+                    "High Tech Modern Language",
+                    "Hyper Transfer Machine Learning",
+                    "Home Tool Management Layout"
+                ],
+                answer: 0,
+                explain: "HTML adalah singkatan dari HyperText Markup Language, format bahasa markah standar untuk menyusun dokumen web."
+            },
+            {
+                q: "2. Bagian manakah dari dokumen HTML yang menjadi wadah seluruh elemen yang tampak langsung di jendela peramban pengguna?",
+                opts: ["Tag <head>", "Tag <body>", "Tag <title>", "Tag <!DOCTYPE>"],
+                answer: 1,
+                explain: "Tag <body> berisi semua teks, tombol, media, dan komponen visual yang dirender di layar."
+            },
+            {
+                q: "3. Mengapa berkas utama sebuah website disarankan diberi nama 'index.html'?",
+                opts: [
+                    "Karena tidak bisa diganti nama lain",
+                    "Standar server web (termasuk GitHub Pages) untuk mengenali berkas beranda utama",
+                    "Agar ukuran file mengecil otomatis",
+                    "Aturan paten bawaan sistem operasi Windows"
+                ],
+                answer: 1,
+                explain: "Penyedia hosting dan server web secara bawaan mendeteksi berkas index.html sebagai titik awal (entry-point) website."
+            },
+            {
+                q: "4. Tag heading manakah yang menempati tingkatan paling tinggi dan berukuran paling besar?",
+                opts: ["<h6>", "<h4>", "<h1>", "<header>"],
+                answer: 2,
+                explain: "Tag <h1> digunakan untuk topik judul utama dengan bobot semantik tertinggi."
+            },
+            {
+                q: "5. Apa fungsi dari baris deklarasi '<!DOCTYPE html>' pada baris paling pertama?",
+                opts: [
+                    "Mengunci akses keamanan web",
+                    "Memberitahu peramban bahwa dokumen memakai spesifikasi HTML5 standar",
+                    "Menghubungkan peramban ke server database",
+                    "Mengubah tema warna halaman secara otomatis"
+                ],
+                answer: 1,
+                explain: "<!DOCTYPE html> adalah instruksi standar yang memastikan browser merender halaman dalam mode HTML5 modern."
+            },
+            {
+                q: "6. Jika ingin membuat daftar langkah berurutan numerik (1, 2, 3), tag pembungkus apa yang digunakan?",
+                opts: ["<ul> (Unordered List)", "<ol> (Ordered List)", "<p>", "<list>"],
+                answer: 1,
+                explain: "<ol> (Ordered List) mengurutkan item menggunakan deret penomoran teratur."
+            },
+            {
+                q: "7. Tag semantik dasar yang digunakan untuk membuat blok teks paragraf adalah...",
+                opts: ["<text>", "<p>", "<s>", "<par>"],
+                answer: 1,
+                explain: "Tag <p> (paragraph) dipakai untuk menyusun susunan kalimat paragraf."
+            },
+            {
+                q: "8. Dalam analogi pembangunan rumah, peranan kode HTML diibaratkan sebagai...",
+                opts: [
+                    "Pondasi tiang, susunan bata, dan kerangka dinding rumah",
+                    "Cat warna interior dan gorden jendela",
+                    "Instalasi kelistrikan dan saklar tombol otomatis",
+                    "Pagar luar pekarangan"
+                ],
+                answer: 0,
+                explain: "HTML menyediakan susunan struktur mentah, CSS mempercantik visual, dan JavaScript menangani fungsi interaksi."
+            },
+            {
+                q: "9. Di mana teks yang ditulis di dalam tag '<title>...' akan muncul saat halaman dibuka?",
+                opts: [
+                    "Di tengah lembar halaman",
+                    "Pada tab atas peramban web",
+                    "Di sudut footer bawah",
+                    "Tidak pernah tampil"
+                ],
+                answer: 1,
+                explain: "Tag <title> yang terletak di dalam <head> menampilkan judul halaman pada tab browser."
+            },
+            {
+                q: "10. Manakah di antara pilihan berikut yang merupakan sintaks tag penutup yang benar?",
+                opts: ["<h1/>", "<\\h1>", "</h1>", "(h1)"],
+                answer: 2,
+                explain: "Tag penutup HTML wajib menyertakan tanda garis miring sebelum nama tag, contohnya: </h1>."
+            }
+        ];
+
+        let answeredMap = {};
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tab-sandbox') {
+                runSandboxPreview();
+            } else if (tabId === 'tab-quiz') {
+                if (!document.getElementById('quizContainer').hasChildNodes()) {
+                    renderQuiz();
+                }
+            }
+        }
+
+        function runSandboxPreview() {
+            const code = document.getElementById('liveCodeEditor').value;
+            const iframe = document.getElementById('livePreviewFrame');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `quiz-card-${qIdx}`;
+
+                const title = document.createElement('div');
+                title.className = 'quiz-question';
+                title.textContent = item.q;
+                card.appendChild(title);
+
+                const optsBox = document.createElement('div');
+                optsBox.className = 'quiz-options';
+
+                item.opts.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-opt';
+                    btn.id = `opt-${qIdx}-${optIdx}`;
+                    btn.textContent = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                    btn.addEventListener('click', () => handleQuizAnswer(qIdx, optIdx));
+                    optsBox.appendChild(btn);
+                });
+                card.appendChild(optsBox);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'quiz-feedback';
+                feedback.id = `feedback-${qIdx}`;
+                card.appendChild(feedback);
+
+                container.appendChild(card);
+            });
+
+            updateQuizProgressUI();
+        }
+
+        function handleQuizAnswer(qIdx, selectedIdx) {
+            if (answeredMap.hasOwnProperty(qIdx)) return;
+
+            const q = quizData[qIdx];
+            answeredMap[qIdx] = selectedIdx;
+
+            const optButtons = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const chosenBtn = document.getElementById(`opt-${qIdx}-${selectedIdx}`);
+            const correctBtn = document.getElementById(`opt-${qIdx}-${q.answer}`);
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+
+            if (selectedIdx === q.answer) {
+                chosenBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-correct';
+                feedbackEl.innerHTML = `<strong>✓ Benar!</strong> ${q.explain}`;
+            } else {
+                chosenBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-wrong';
+                feedbackEl.innerHTML = `<strong>✗ Belum Tepat!</strong> Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.answer)}. ${q.opts[q.answer]}</strong>.<br>${q.explain}`;
+            }
+
+            updateQuizProgressUI();
+
+            if (Object.keys(answeredMap).length === quizData.length) {
+                showQuizResult();
+            }
+        }
+
+        function updateQuizProgressUI() {
+            const answeredCount = Object.keys(answeredMap).length;
+            const percent = Math.round((answeredCount / quizData.length) * 100);
+            
+            document.getElementById('quizProgressText').innerText = `Dijawab: ${answeredCount} / ${quizData.length} Soal`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function showQuizResult() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (answeredMap[idx] === q.answer) correctCount++;
+            });
+
+            const score = correctCount * 10;
+            const scoreBox = document.getElementById('quizScoreBox');
+            const scoreTitle = document.getElementById('quizScoreTitle');
+            const scoreFeedback = document.getElementById('quizScoreFeedback');
+
+            scoreTitle.innerText = `Skor Akhir Kamu: ${score} / 100 (${correctCount} dari 10 Soal Benar)`;
+            if (score >= 80) {
+                scoreFeedback.innerText = "Luar biasa! Konsep anatomi HTML5 sudah kamu kuasai secara solid. Silakan lanjut ke Modul 02!";
+            } else if (score >= 60) {
+                scoreFeedback.innerText = "Bagus! Kamu sudah memahami konsep dasar. Coba pelajari ulang bagian struktur dokumen agar lebih paham.";
+            } else {
+                scoreFeedback.innerText = "Tetap semangat! Buka kembali tab 1 dan tab 2, lalu coba ulangi kuis ini untuk meningkatkan nilaimu.";
+            }
+
+            scoreBox.style.display = 'block';
+            scoreBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            answeredMap = {};
+            document.getElementById('quizScoreBox').style.display = 'none';
+            renderQuiz();
+        }
+
+        function getProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function updateProgressUI() {
+            const prog = getProgress();
+            const badge = document.getElementById('moduleStatusBadge');
+            const badgeText = document.getElementById('statusBadgeText');
+            const btnMark = document.getElementById('btnMarkComplete');
+
+            if (prog[CURRENT_MODULE_ID] === 'completed') {
+                badge.className = 'complete-status-badge status-badge-done';
+                badgeText.innerText = 'Sudah Selesai ✓';
+                btnMark.innerHTML = '<span>✓ Modul Selesai (Buka Halaman Modul 02 →)</span>';
+            } else {
+                badge.className = 'complete-status-badge status-badge-active';
+                badgeText.innerText = 'Sedang Dipelajari';
+                btnMark.innerHTML = '<span>✅ Tandai Selesai & Buka Modul 02 🚀</span>';
+            }
+        }
+
+        function markModuleComplete() {
+            const prog = getProgress();
+            prog[CURRENT_MODULE_ID] = 'completed';
+
+            if (!prog[2] || prog[2] === 'locked') {
+                prog[2] = 'current';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+            updateProgressUI();
+            showToast("Modul 01 tuntas! Modul 02 kini terbuka di Dashboard 🎉", "🎉");
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        }
+
+        function showToast(text, icon = "✅") {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            runSandboxPreview();
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
