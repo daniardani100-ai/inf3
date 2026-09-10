@@ -1,1 +1,1183 @@
-haha
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Informatika Kelas 12 | Web Engineering & Cloud DB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-hover: #1A253F;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-emerald-glow: rgba(16, 185, 129, 0.3);
+            --accent-purple: #A855F7;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.78);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 5rem 1.25rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.1rem 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 0.8rem; }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #38BDF8, #10B981);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .logo-text h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-text p { font-size: 0.75rem; color: var(--text-muted); }
+
+        .nav-stats { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #F87171;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-reset:hover { background: rgba(239, 68, 68, 0.2); color: #FFF; }
+
+        .hero {
+            background: linear-gradient(180deg, rgba(20, 35, 55, 0.6) 0%, rgba(19, 27, 46, 0.85) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            gap: 0.4rem;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h2 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FFFFFF 30%, #38BDF8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p.prolog-text {
+            color: #CBD5E1;
+            font-size: 0.98rem;
+            max-width: 850px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-box {
+            background: rgba(11, 15, 25, 0.65);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) { .progress-box { grid-template-columns: 1fr; } }
+
+        .progress-info { display: flex; flex-direction: column; gap: 0.5rem; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; }
+        .progress-bar-bg { height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 999px; overflow: hidden; }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38BDF8, #10B981);
+            border-radius: 999px;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-stats-pill { text-align: right; }
+        .progress-stats-pill .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #38BDF8;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
+        }
+        .progress-stats-pill .lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title h3 { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 0.6rem; }
+        .section-title p { font-size: 0.9rem; color: var(--text-muted); }
+
+        .filter-group {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 0.25rem;
+            border-radius: 12px;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.45rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active { background: var(--primary); color: #0B0F19; box-shadow: 0 0 10px var(--primary-glow); }
+
+        .roadmap-timeline {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            bottom: 2rem;
+            left: 36px;
+            width: 3px;
+            background: linear-gradient(180deg, #10B981 0%, #38BDF8 60%, rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 999px;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) { .roadmap-timeline::before { left: 24px; } }
+
+        .roadmap-card {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 72px 1fr;
+            gap: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.35rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        @media (max-width: 768px) {
+            .roadmap-card { grid-template-columns: 48px 1fr; gap: 1rem; padding: 1.1rem 1rem; }
+        }
+
+        .roadmap-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .node-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            background: #1E293B;
+            border: 2px solid var(--border-color);
+            align-self: flex-start;
+        }
+
+        @media (max-width: 768px) { .node-badge { width: 42px; height: 42px; font-size: 0.95rem; border-radius: 12px; } }
+
+        .roadmap-card.status-completed { border-color: rgba(16, 185, 129, 0.3); }
+        .roadmap-card.status-completed .node-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10B981;
+            color: #10B981;
+        }
+
+        .roadmap-card.status-current {
+            border-color: #38BDF8;
+            background: linear-gradient(135deg, rgba(20, 35, 60, 0.75) 0%, rgba(19, 27, 46, 0.9) 100%);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        .roadmap-card.status-current .node-badge {
+            background: #38BDF8;
+            border-color: #7DD3FC;
+            color: #0B0F19;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .roadmap-card.status-locked { opacity: 0.6; }
+        .roadmap-card.status-locked .node-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+        }
+
+        .card-body { display: flex; flex-direction: column; gap: 0.4rem; }
+        .card-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+        .step-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+
+        .tag-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .tag-completed { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .tag-current { background: rgba(56, 189, 248, 0.2); color: #7DD3FC; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .tag-locked { background: rgba(255, 255, 255, 0.05); color: #94A3B8; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #F8FAFC;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .card-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+        .card-tags { display: flex; gap: 0.4rem; margin-top: 0.2rem; flex-wrap: wrap; }
+        .topic-pill {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            color: #CBD5E1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: #0B0F19;
+            padding: 0.35rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.84);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            max-width: 680px;
+            width: 100%;
+            padding: 1.8rem;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-header { margin-bottom: 1.2rem; }
+        .modal-header h4 { font-size: 1.35rem; font-weight: 700; margin-top: 0.4rem; color: #F8FAFC; }
+        .modal-content-section { margin-bottom: 1.2rem; }
+        .modal-content-section h5 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #38BDF8;
+            margin-bottom: 0.4rem;
+        }
+
+        .modal-content-section ul { padding-left: 1.2rem; font-size: 0.9rem; color: #CBD5E1; }
+        .modal-content-section ul li { margin-bottom: 0.35rem; }
+
+        .code-preview-box {
+            background: #0B0F19;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #A7F3D0;
+            overflow-x: auto;
+        }
+
+        .modal-actions {
+            margin-top: 1.8rem;
+            display: flex;
+            gap: 0.8rem;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-toggle-status {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #34D399;
+            padding: 0.55rem 0.9rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-toggle-status.undo {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #F87171;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.55rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            padding: 0.55rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #38BDF8;
+            color: white;
+            padding: 0.75rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="navbar">
+            <div class="logo-area">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">
+                    <h1>INFORMATIKA KELAS 12</h1>
+                    <p>Fase F • Proyek Web Interaktif & Supabase Cloud (16 Modul)</p>
+                </div>
+            </div>
+            <div class="nav-stats">
+                <div class="badge-pill">
+                    <span>🗓️</span>
+                    <span>32 Pertemuan (2x/pekan)</span>
+                </div>
+                <div class="badge-pill" id="nav-active-pill">
+                    <span>🚀</span>
+                    <span id="nav-active-text">Modul 1 / 16 Aktif</span>
+                </div>
+                <button class="btn-reset" onclick="resetAllProgress()" title="Reset progres belajar siswa">
+                    🔄 Reset Progres
+                </button>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-tag">🚀 Full-Stack Learning Journey</div>
+            <h2>Bangun Web Interaktif & Cloud Database dari Nol</h2>
+            <p class="prolog-text">
+                Dirancang khusus bagi siswa pemula tanpa latar belakang pemrograman. Melalui 16 modul terpandu ini, kamu akan diajak menapaki alur rekayasa perangkat lunak nyata: mulai dari kerangka HTML, styling CSS Flexbox, interaktivitas JavaScript, hosting gratis via <strong>GitHub Pages</strong>, hingga integrasi database modern di <strong>Supabase</strong>.
+            </p>
+
+            <div class="progress-box">
+                <div class="progress-info">
+                    <div class="progress-labels">
+                        <span style="color: #94A3B8;">Progres Belajar Mandiri Kamu</span>
+                        <span style="color: #38BDF8; font-weight: 700;" id="progress-percent">0% Selesai</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-bar"></div>
+                    </div>
+                </div>
+                <div class="progress-stats-pill">
+                    <div class="num" id="progress-count">00<span style="font-size: 1rem; color: var(--text-muted);">/16</span></div>
+                    <div class="lbl">Modul Diselesaikan</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <div class="section-title">
+                    <h3>🗺️ Silabus 16 Modul Terstruktur</h3>
+                    <p>Klik salah satu modul untuk melihat panduan langkah, konsep, dan cuplikan kode latihan.</p>
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="filterRoadmap('all', this)">Semua</button>
+                    <button class="filter-btn" onclick="filterRoadmap('completed', this)">✅ Selesai</button>
+                    <button class="filter-btn" onclick="filterRoadmap('current', this)">🚀 Sedang Aktif</button>
+                    <button class="filter-btn" onclick="filterRoadmap('locked', this)">🔒 Belum</button>
+                </div>
+            </div>
+
+            <div class="roadmap-timeline" id="timelineContainer"></div>
+        </section>
+
+        <!-- Modal Dialog -->
+        <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+            <div class="modal-box" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="forceCloseModal()">✕</button>
+                <div class="modal-header">
+                    <span id="modalMeta" class="step-label" style="color: #38BDF8;">MODUL 01</span>
+                    <h4 id="modalTitle">Judul Modul</h4>
+                </div>
+                <div class="modal-content-section">
+                    <h5>🎯 Tujuan Pembelajaran Praktis</h5>
+                    <ul id="modalGoals"></ul>
+                </div>
+                <div class="modal-content-section">
+                    <h5>📌 Konsep & Analogi Ramah Pemula</h5>
+                    <ul id="modalTopics"></ul>
+                </div>
+                <div class="modal-content-section">
+                    <h5>💻 Cuplikan Kode Latihan Siswa</h5>
+                    <div class="code-preview-box" id="modalSnippet"></div>
+                </div>
+                <div class="modal-content-section">
+                    <h5>💡 Tantangan Nyata Pekan Ini</h5>
+                    <p id="modalActivity" style="font-size: 0.9rem; color: #CBD5E1;"></p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="modalToggleBtn" class="btn-toggle-status" onclick="toggleCurrentModuleStatus()"></button>
+                    <div style="display: flex; gap: 0.6rem;">
+                        <button class="btn-secondary" onclick="forceCloseModal()">Tutup</button>
+                        <a href="#" id="modalActionBtn" class="btn-primary">Mulai Belajar 🚀</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toastBox">
+            <span id="toastIcon">🎉</span>
+            <span id="toastMsg">Progres diperbarui!</span>
+        </div>
+
+        <footer>
+            <p>⚡ Informatika Fase F (Kelas 12 SMA) • Kurikulum Merdeka Terintegrasi</p>
+            <p style="font-size: 0.75rem; margin-top: 0.3rem;">Didesain Khusus untuk Praktik Mandiri Siswa • Tersimpan di LocalStorage</p>
+        </footer>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const TOTAL_MODULES = 16;
+
+        // Dataset Komprehensif 16 Modul Terstruktur
+        const moduleData = {
+            1: {
+                id: 1,
+                element: "FRONT-END FONDASI",
+                duration: "Pertemuan 1–2",
+                title: "Anatomi Web Pertama & Elemen Teks HTML5",
+                desc: "Memahami struktur dokumen web, fungsi browser, menyusun index.html pertama, serta menggunakan tag judul, paragraf, dan daftar berurutan.",
+                tags: ["#HTML5", "#DokumenWeb", "#IndexHTML"],
+                goals: [
+                    "Siswa memahami bagaimana browser membaca baris kode HTML menjadi tampilan visual.",
+                    "Siswa mampu menulis struktur wajib HTML5 (doctype, html, head, title, body).",
+                    "Siswa mampu menyajikan profil diri terstruktur menggunakan tag heading, p, dan list."
+                ],
+                topics: [
+                    "Analogi arsitektur website: HTML (struktur), CSS (dekorasi), JavaScript (perilaku).",
+                    "Tag dasar teks: <h1> s.d <h6>, <p>, <strong>, <em>, <hr>, serta <br>.",
+                    "Struktur daftar: Unordered List <ul> dan Ordered List <ol> beserta tag <li>."
+                ],
+                snippet: `&lt;!DOCTYPE html&gt;\n&lt;html lang="id"&gt;\n&lt;head&gt;\n  &lt;meta charset="UTF-8"&gt;\n  &lt;title&gt;Portofolio Siswa&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;h1&gt;Halo, Dunia!&lt;/h1&gt;\n  &lt;p&gt;Ini web pertama saya di kelas 12.&lt;/p&gt;\n&lt;/body&gt;\n&lt;/html&gt;`,
+                activity: "Ketik kode di atas menggunakan VS Code atau Notepad, simpan dengan ekstensi index.html, lalu buka langsung di peramban web komputermu.",
+                btnLink: "modul-01.html"
+            },
+            2: {
+                id: 2,
+                element: "INTERAKSI FORMULIR",
+                duration: "Pertemuan 3–4",
+                title: "Formulir Input Data Interaktif (Forms & Controls)",
+                desc: "Merancang formulir input pengumpulan data siswa dengan kotak isian teks, angka, dropdown pilihan, dan tombol submit data.",
+                tags: ["#HTMLForms", "#InputTypes", "#DataCollector"],
+                goals: [
+                    "Siswa memahami cara kerja formulir web dalam menangkap input dari pengunjung.",
+                    "Siswa mampu menggunakan beragam jenis input (text, email, number, select, textarea).",
+                    "Siswa menerapkan atribut validasi wajib isi (required dan placeholder)."
+                ],
+                topics: [
+                    "Wadah formulir menggunakan tag <form>.",
+                    "Elemen input teks, kotak centang (checkbox), dan pilihan dropdown (<select> & <option>).",
+                    "Penghubung elemen formulir dengan tag <label for='...'> untuk aksesibilitas ramah pengguna."
+                ],
+                snippet: `&lt;form id="formSiswa"&gt;\n  &lt;label for="nama"&gt;Nama Siswa:&lt;/label&gt;\n  &lt;input type="text" id="nama" placeholder="Masukkan nama..." required&gt;\n  &lt;br&gt;&lt;br&gt;\n  &lt;label for="pesan"&gt;Catatan:&lt;/label&gt;\n  &lt;textarea id="pesan" required&gt;&lt;/textarea&gt;\n  &lt;br&gt;&lt;br&gt;\n  &lt;button type="submit"&gt;Kirim Catatan&lt;/button&gt;\n&lt;/form&gt;`,
+                activity: "Rancang sebuah formulir formulir aspirasi kelas atau buku kas sederhana menggunakan minimal 3 jenis input formulir berbeda.",
+                btnLink: "modul-02.html"
+            },
+            3: {
+                id: 3,
+                element: "DESAIN & TATA LETAK",
+                duration: "Pertemuan 5–6",
+                title: "Styling Antarmuka & Tata Letak Responsif (CSS Flexbox)",
+                desc: "Menghias antarmuka web dengan CSS modern: warna, tipografi, padding, margin, serta membuat susunan card layout fleksibel menggunakan Flexbox.",
+                tags: ["#CSS3", "#Flexbox", "#ResponsiveDesign"],
+                goals: [
+                    "Siswa memahami cara kerja CSS Selector (elemen, class, dan id).",
+                    "Siswa memahami prinsip Box Model (margin, border, padding, content).",
+                    "Siswa mampu menyusun kartu-kartu data rapi dan responsif dengan CSS Flexbox."
+                ],
+                topics: [
+                    "Metode penulisan CSS (External vs Internal CSS pada tag <style>).",
+                    "Palet warna modern (HEX, RGB) dan tipografi sistemik.",
+                    "Display Flex: justify-content, align-items, flex-direction, dan gap."
+                ],
+                snippet: `.card-container {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 16px;\n  justify-content: center;\n}\n.card {\n  background: #ffffff;\n  border-radius: 12px;\n  padding: 16px;\n  box-shadow: 0 4px 6px rgba(0,0,0,0.1);\n}`,
+                activity: "Ubah formulir polos dari modul 2 menjadi sebuah kotak kartu modern di tengah layar (center screen) yang estetik dan rapi.",
+                btnLink: "modul-03.html"
+            },
+            4: {
+                id: 4,
+                element: "VERSION CONTROL & DEPLOY",
+                duration: "Pertemuan 7–8",
+                title: "Git & Publikasi Online Pertama di GitHub Pages",
+                desc: "Mengenal rekam jejak kode dengan Git, membuat repositori di GitHub, dan memublikasikan website secara gratis agar bisa diakses melalui URL publik.",
+                tags: ["#Git", "#GitHubPages", "#LiveWebsite"],
+                goals: [
+                    "Siswa memahami fungsi Version Control System (VCS) dalam proyek kerekayasaan tim.",
+                    "Siswa mampu membuat akun GitHub dan repositori publik baru.",
+                    "Siswa berhasil memublikasikan website ke alamat username.github.io/proyek."
+                ],
+                topics: [
+                    "Konsep commit, branch, dan repositori online.",
+                    "Mekanisme deployment statis otomatis menggunakan GitHub Pages.",
+                    "Struktur path berkas (mengapa berkas utama harus bernama index.html)."
+                ],
+                snippet: `# Alur Praktis Terminal Git (atau Web Upload):\ngit init\ngit add .\ngit commit -m "Upload proyek web pertama kelas 12"\ngit branch -M main\ngit remote add origin https://github.com/akunmu/proyek-web.git\ngit push -u origin main`,
+                activity: "Unggah file latihanmu ke repositori GitHub, aktifkan GitHub Pages di menu Settings, dan bagikan tautan webmu ke teman sekelas!",
+                btnLink: "modul-04.html"
+            },
+            5: {
+                id: 5,
+                element: "LOGIKA PEMROGRAMAN",
+                duration: "Pertemuan 9–10",
+                title: "Logika Dasar JavaScript & Manipulasi DOM",
+                desc: "Memberikan nyawa pada web: variabel, tipe data, serta mengubah konten teks dan warna dokumen web secara langsung menggunakan DOM Selection.",
+                tags: ["#JavaScript", "#DOM_Manipulation", "#InteractiveWeb"],
+                goals: [
+                    "Siswa memahami kedudukan JavaScript sebagai otak yang mengendalikan interaksi halaman web.",
+                    "Siswa mengenal variabel modern (let, const) dan tipe data (string, number, boolean).",
+                    "Siswa mampu menargetkan elemen HTML dengan document.getElementById()."
+                ],
+                topics: [
+                    "Penyisipan skrip menggunakan tag <script>.",
+                    "Menyeleksi elemen HTML via id dan mengubah properti innerText atau style.",
+                    "Menggunakan Console Browser (F12) untuk menguji perintah dan menemukan pesan error."
+                ],
+                snippet: `const judul = document.getElementById("judulWeb");\nconst tombol = document.getElementById("btnAksi");\n\ntombol.addEventListener("click", () => {\n  judul.innerText = "Selamat Datang di Web Kelas 12!";\n  judul.style.color = "#38BDF8";\n});`,
+                activity: "Buat tombol 'Ubah Mode' sederhana yang saat diklik dapat mengganti teks judul dan warna latar belakang website.",
+                btnLink: "modul-05.html"
+            },
+            6: {
+                id: 6,
+                element: "LOGIKA PEMROGRAMAN",
+                duration: "Pertemuan 11–12",
+                title: "Menangkap Input Pengguna & Event Handling Form",
+                desc: "Menghubungkan tombol formulir dengan JavaScript: mencegah reload halaman bawaan, membaca nilai isian, dan menampilkannya kembali ke layar.",
+                tags: ["#EventHandling", "#FormValue", "#PreventDefault"],
+                goals: [
+                    "Siswa memahami peristiwa event 'submit' dan fungsi penting event.preventDefault().",
+                    "Siswa mampu membaca nilai ketikan pengguna menggunakan properti input.value.",
+                    "Siswa dapat memvalidasi form kosong sebelum data diproses lebih lanjut."
+                ],
+                topics: [
+                    "Mekanisme Event Listener pada elemen form formulir.",
+                    "Pencegahan form submit otomatis peramban agar halaman tidak berkedip ulang.",
+                    "Membuat elemen HTML baru secara dinamis menggunakan innerHTML."
+                ],
+                snippet: `document.getElementById("formKontak").addEventListener("submit", (e) => {\n  e.preventDefault();\n  const namaInput = document.getElementById("nama").value;\n  document.getElementById("hasil").innerHTML = \n    \`&lt;p&gt;Halo &lt;strong&gt;\${namaInput}&lt;/strong&gt;, datamu berhasil dicatat!&lt;/p&gt;\`;\n});`,
+                activity: "Buat formulir mini 'Sapa Siswa': saat siswa mengetikkan nama dan klik tombol, muncul pesan sambutan khusus di bawah form.",
+                btnLink: "modul-06.html"
+            },
+            7: {
+                id: 7,
+                element: "STRUKTUR DATA",
+                duration: "Pertemuan 13–14",
+                title: "Koleksi Data Terstruktur (Array of Objects & JSON)",
+                desc: "Mengorganisasi data banyak dalam bentuk Array dan Objek JavaScript, serta merender daftar data berulang ke antarmuka kartu web.",
+                tags: ["#ArrayOfObjects", "#JSON", "#DataStructures"],
+                goals: [
+                    "Siswa memahami representasi data terstruktur pasangan Kunci-Nilai (Key-Value).",
+                    "Siswa mampu membuat daftar koleksi item menggunakan struktur Array of Objects.",
+                    "Siswa mampu menampilkan daftar data ke layar web secara efisien menggunakan fungsi .map()."
+                ],
+                topics: [
+                    "Struktur Object JavaScript: { id: 1, nama: 'Budi', kelas: '12-A' }.",
+                    "Struktur Array: [ item1, item2, item3 ].",
+                    "Mengenal format pertukaran data standar internet (JSON)."
+                ],
+                snippet: `const daftarSiswa = [\n  { id: 1, nama: "Ahmad", nilai: 90 },\n  { id: 2, nama: "Siti", nilai: 95 }\n];\n\nconst kontainer = document.getElementById("list");\nkontainer.innerHTML = daftarSiswa.map(s => \`\n  &lt;div class="item"&gt;\${s.nama} - Nilai: \${s.nilai}&lt;/div&gt;\n\`).join('');`,
+                activity: "Buat daftar array berisi 3 data hobi atau mata pelajaran favoritmu, lalu tampilkan seluruh datanya dalam bentuk kartu web.",
+                btnLink: "modul-07.html"
+            },
+            8: {
+                id: 8,
+                element: "PENYIMPANAN DATA",
+                duration: "Pertemuan 15–16",
+                title: "Penyimpanan Browser Mandiri (LocalStorage API)",
+                desc: "Menyimpan data aplikasi langsung di memori browser pengguna sehingga catatan tidak hilang meskipun halaman di-refresh atau browser ditutup.",
+                tags: ["#LocalStorage", "#PersistensiData", "#JSONParseStringify"],
+                goals: [
+                    "Siswa memahami keterbatasan variabel JavaScript yang hilang saat halaman di-refresh.",
+                    "Siswa menguasai perintah dasar LocalStorage: setItem, getItem, dan removeItem.",
+                    "Siswa mampu mengonversi data objek menjadi string teks menggunakan JSON.stringify dan JSON.parse."
+                ],
+                topics: [
+                    "Konsep penyimpanan sisi klien (Client-side Web Storage).",
+                    "Serialisasi data kompleks ke dalam format teks string.",
+                    "Membangun aplikasi Catatan Tugas (To-Do List) offline yang persisten."
+                ],
+                snippet: `// Simpan data ke browser\nconst data = [{ tugas: "Belajar Git" }];\nlocalStorage.setItem("daftarTugas", JSON.stringify(data));\n\n// Ambil kembali data dari browser\nconst tersimpan = JSON.parse(localStorage.getItem("daftarTugas")) || [];\nconsole.log(tersimpan);`,
+                activity: "Bangun aplikasi 'Daftar Belanjaan / Catatan Pelajaran' di mana item yang sudah kamu tambahkan tetap muncul saat web dibuka ulang esok hari.",
+                btnLink: "modul-08.html"
+            },
+            9: {
+                id: 9,
+                element: "CLOUD BACKEND",
+                duration: "Pertemuan 17–18",
+                title: "Pengenalan Cloud Backend & Setup Project Supabase",
+                desc: "Beralih dari penyimpanan lokal menuju cloud bersama: mengenal konsep BaaS (Backend-as-a-Service), registrasi Supabase, dan membuat proyek cloud pertama.",
+                tags: ["#Supabase", "#CloudDatabase", "#PostgreSQL"],
+                goals: [
+                    "Siswa memahami perbedaan mendasar penyimpanan lokal (hanya di HP sendiri) vs database cloud (dapat diakses bersama).",
+                    "Siswa mengenal platform Supabase sebagai serverless backend modern berbasis PostgreSQL.",
+                    "Siswa berhasil membuat Organization dan Project baru di dasbor Supabase Cloud."
+                ],
+                topics: [
+                    "Arsitektur Client-Server vs Serverless BaaS.",
+                    "Dasbor manajemen Supabase: Project Settings, API Credentials, dan Database.",
+                    "Memahami Project URL dan Anon Public Key untuk koneksi aplikasi."
+                ],
+                snippet: `/* Catat kredensial proyek Supabase Anda dari menu: \n   Project Settings -> API\n\n   URL Proyek: https://xxxx.supabase.co\n   Anon Key  : eyJhbGciOiJIUzI1NiIsInR5cCI... */`,
+                activity: "Daftar akun Supabase menggunakan akun GitHub masing-masing, buat 1 Project baru bernama 'proyek-sekolah', dan salin kredensial API-nya.",
+                btnLink: "modul-09.html"
+            },
+            10: {
+                id: 10,
+                element: "CLOUD BACKEND",
+                duration: "Pertemuan 19–20",
+                title: "Pemodelan Relasional Basis Data (Table Editor Supabase)",
+                desc: "Membuat tabel database secara visual tanpa sintaks SQL yang membingungkan: menentukan Primary Key (id), kolom teks, angka, dan penanda waktu otomatis.",
+                tags: ["#DatabaseTable", "#TableEditor", "#PrimaryKey"],
+                goals: [
+                    "Siswa memahami konsep dasar tabel basis data: Baris (Record) dan Kolom (Field).",
+                    "Siswa mengenal tipe data utama database: int8, text, bool, dan timestamptz.",
+                    "Siswa mampu membuat tabel baru bernama 'aspirasi' atau 'absensi' lengkap dengan nilai default."
+                ],
+                topics: [
+                    "Fungsi Primary Key sebagai pengenal unik data (mencegah data tertukar).",
+                    "Fitur created_at dengan default now() untuk mencatat waktu otomatis.",
+                    "Pengaturan izin nilai kosong (is Nullable) vs nilai wajib diisi."
+                ],
+                snippet: `/* Struktur Tabel 'catatan':\n   - id         : int8 (Primary Key, Auto-increment)\n   - created_at : timestamptz (Default: now())\n   - nama       : text (Wajib diisi)\n   - isi_pesan  : text (Wajib diisi)\n   - status     : bool (Default: false) */`,
+                activity: "Gunakan fitur Table Editor di Supabase untuk membuat tabel baru dan coba isi 2 baris data contoh langsung dari antarmuka tabel.",
+                btnLink: "modul-10.html"
+            },
+            11: {
+                id: 11,
+                element: "INTEGRASI BACKEND",
+                duration: "Pertemuan 21–22",
+                title: "Menghubungkan Web Front-End ke Supabase via JavaScript CDN",
+                desc: "Memasang pustaka resmi Supabase Client ke dalam dokumen HTML menggunakan tautan CDN dan melakukan inisialisasi koneksi secara aman.",
+                tags: ["#SupabaseJS", "#CDN_Script", "#ClientInit"],
+                goals: [
+                    "Siswa memahami fungsi library eksternal dalam mempercepat pengembangan perangkat lunak.",
+                    "Siswa mampu menyematkan tag script CDN Supabase JS ke dokumen HTML.",
+                    "Siswa berhasil menginisialisasi objek client Supabase di script JavaScript."
+                ],
+                topics: [
+                    "Penyisipan library lewat Content Delivery Network (jsdelivr / unpkg).",
+                    "Mengenal objek global 'supabase' bawaan CDN.",
+                    "Inisialisasi fungsi supabase.createClient(URL, KEY)."
+                ],
+                snippet: `&lt;!-- CDN Supabase JS di bagian &lt;head&gt; --&gt;\n&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;&lt;/script&gt;\n\n&lt;script&gt;\n  const SUPABASE_URL = 'https://YOUR-ID.supabase.co';\n  const SUPABASE_KEY = 'YOUR-ANON-KEY';\n  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);\n  console.log("Koneksi Supabase siap!", db);\n&lt;/script&gt;`,
+                activity: "Hubungkan kode web index.html milikmu dengan kunci API Supabase masing-masing dan periksa konsol browser untuk memastikan tidak ada pesan kegagalan koneksi.",
+                btnLink: "modul-11.html"
+            },
+            12: {
+                id: 12,
+                element: "INTEGRASI BACKEND",
+                duration: "Pertemuan 23–24",
+                title: "Operasi READ: Menampilkan Data Cloud ke Layar Antarmuka",
+                desc: "Membaca baris data yang tersimpan di cloud database Supabase menggunakan fungsi async/await select() dan merendernya otomatis ke antarmuka web.",
+                tags: ["#CRUD_Read", "#AsyncAwait", "#FetchData"],
+                goals: [
+                    "Siswa memahami konsep pemrograman asynchronous (async/await) saat mengambil data internet.",
+                    "Siswa mampu mengeksekusi perintah client.from('tabel').select('*').",
+                    "Siswa mampu menangani status loading dan pesan error dari database."
+                ],
+                topics: [
+                    "Perintah SQL SELECT yang dikemas dalam fungsi JavaScript.",
+                    "Pengurutan data (order by created_at) dari yang terbaru.",
+                    "Mengubah hasil respons JSON dari Supabase menjadi kartu web di layar."
+                ],
+                snippet: `async function muatCatatan() {\n  const { data, error } = await db\n    .from('catatan')\n    .select('*')\n    .order('created_at', { ascending: false });\n    \n  if (error) return alert("Gagal memuat: " + error.message);\n  \n  const wadah = document.getElementById("listData");\n  wadah.innerHTML = data.map(item => \`\n    &lt;div class="card"&gt;\n      &lt;h4&gt;\${item.nama}&lt;/h4&gt;\n      &lt;p&gt;\${item.isi_pesan}&lt;/p&gt;\n    &lt;/div&gt;\n  \`).join('');\n}\nmuatCatatan();`,
+                activity: "Jalankan fungsi di atas pada proyek webmu sehingga 2 baris data yang kamu ketik di Supabase pada modul 10 berhasil muncul di layar web.",
+                btnLink: "modul-12.html"
+            },
+            13: {
+                id: 13,
+                element: "INTEGRASI BACKEND",
+                duration: "Pertemuan 25–26",
+                title: "Operasi CREATE: Menyimpan Input Form ke Database Cloud",
+                desc: "Menghubungkan input formulir web siswa langsung ke cloud: saat tombol submit ditekan, data terkirim dan tersimpan aman di tabel Supabase.",
+                tags: ["#CRUD_Create", "#InsertData", "#CloudSync"],
+                goals: [
+                    "Siswa mampu menangkap isian form dan memaketkannya ke dalam objek payload.",
+                    "Siswa mampu mengeksekusi perintah client.from('tabel').insert([...]).",
+                    "Siswa mampu melakukan pembaruan otomatis pada tampilan web setelah data berhasil disimpan."
+                ],
+                topics: [
+                    "Operasi penambahan data (INSERT INTO).",
+                    "Pengaturan form reset otomatis setelah pengiriman sukses.",
+                    "Memberikan umpan balik visual (notifikasi berhasil / gagal) kepada pengunjung web."
+                ],
+                snippet: `document.getElementById("formAspirasi").addEventListener("submit", async (e) => {\n  e.preventDefault();\n  const nama = document.getElementById("inputNama").value;\n  const pesan = document.getElementById("inputPesan").value;\n  \n  const { error } = await db.from('catatan').insert([{ nama, isi_pesan: pesan }]);\n  \n  if (error) return alert("Gagal mengirim: " + error.message);\n  alert("Data berhasil terkirim ke Cloud!");\n  document.getElementById("formAspirasi").reset();\n  muatCatatan(); // Panggil fungsi muat data ulang\n});`,
+                activity: "Ketik sebuah pesan baru melalui formulir di webmu, kirim, dan periksa dasbor Supabase untuk melihat baris baru bertambah secara real-time.",
+                btnLink: "modul-13.html"
+            },
+            14: {
+                id: 14,
+                element: "INTEGRASI BACKEND",
+                duration: "Pertemuan 27–28",
+                title: "Operasi UPDATE & DELETE: Manajemen Data Komprehensif",
+                desc: "Menyempurnakan fungsionalitas CRUD: menambahkan tombol Hapus data spesifik berdasarkan ID serta fitur ubah status (selesai/belum).",
+                tags: ["#CRUD_Delete", "#CRUD_Update", "#FilterEQ"],
+                goals: [
+                    "Siswa memahami pentingnya filter spesifik (.eq('id', idTertentu)) agar tidak salah menghapus data.",
+                    "Siswa mampu membuat tombol aksi 'Hapus' pada setiap kartu data.",
+                    "Siswa mampu membuat fungsi pengubah status (misal: menandai tugas selesai)."
+                ],
+                topics: [
+                    "Operasi penghapusan data dengan konfirmasi jendela dialog confirm().",
+                    "Operasi pembaruan nilai kolom (UPDATE tabel SET status = true).",
+                    "Filter kesetaraan nilai pada Supabase SDK menggunakan method .eq()."
+                ],
+                snippet: `// Menghapus data spesifik\nasync function hapusCatatan(idHapus) {\n  if (confirm("Apakah kamu yakin ingin menghapus data ini?")) {\n    await db.from('catatan').delete().eq('id', idHapus);\n    muatCatatan();\n  }\n}\n\n// Memperbarui status\nasync function toggleStatus(idData, statusSekarang) {\n  await db.from('catatan').update({ status: !statusSekarang }).eq('id', idData);\n  muatCatatan();\n}`,
+                activity: "Lengkapi kartu webmu dengan tombol '🗑️ Hapus' dan uji coba hapus salah satu baris data lama langsung dari antarmuka web.",
+                btnLink: "modul-14.html"
+            },
+            15: {
+                id: 15,
+                element: "KEAMANAN SISTEM",
+                duration: "Pertemuan 29–30",
+                title: "Keamanan Basis Data & Row Level Security (RLS)",
+                desc: "Memahami mengapa kunci anonim di front-end bisa diakses publik dan cara melindungi tabel Supabase dengan aturan kebijakan akses baris (RLS Policies).",
+                tags: ["#RLS", "#DatabaseSecurity", "#CyberSafety"],
+                goals: [
+                    "Siswa memahami risiko data jika database diakses publik tanpa aturan izin.",
+                    "Siswa mampu mengaktifkan fitur Row Level Security (RLS) pada tabel Supabase.",
+                    "Siswa mampu merumuskan Policy izin: publik boleh membaca dan menambah data, tetapi dibatasi dalam menghapus data."
+                ],
+                topics: [
+                    "Perbedaan Anon Public Key vs Secret Service Role Key.",
+                    "Prinsip Least Privilege dalam keamanan data komputasi modern.",
+                    "Membuat kebijakan SQL sederhana: Policy for SELECT & INSERT."
+                ],
+                snippet: `/* Contoh Kebijakan Policy RLS Supabase:\n   Nama: Publik Boleh Membaca Data\n   Target roles: anon\n   Command: SELECT\n   USING expression: true\n\n   Nama: Publik Boleh Menambah Catatan\n   Target roles: anon\n   Command: INSERT\n   WITH CHECK expression: true */`,
+                activity: "Aktifkan sakelar 'Enable Row Level Security' di tabel Supabase dan buat policy agar webmu tetap bisa membaca serta menambah data secara aman.",
+                btnLink: "modul-15.html"
+            },
+            16: {
+                id: 16,
+                element: "PROYEK & EXPO",
+                duration: "Pertemuan 31–32",
+                title: "Pengujian Sistem, Polish UI & Expo Peluncuran Produk Publik",
+                desc: "Tahap final rekayasa: pengujian di berbagai perangkat (HP/laptop), merapikan bug antarmuka, dan mempresentasikan karya web sekolah yang sudah aktif online.",
+                tags: ["#ProductLaunch", "#TestingDebugging", "#ExpoKarya"],
+                goals: [
+                    "Siswa mampu melakukan pengujian responsivitas dan fungsionalitas menyeluruh di perangkat seluler.",
+                    "Siswa mampu membersihkan log error dan merapikan struktur kode (code refactoring).",
+                    "Siswa mampu mempresentasikan karya aplikasi web dan merefleksikan proses rekayasa yang telah dilalui."
+                ],
+                topics: [
+                    "Siklus akhir rekayasa perangkat lunak: Testing, Refinement, & Deployment.",
+                    "Penyusunan berkas dokumentasi README.md yang jelas pada repositori GitHub.",
+                    "Presentasi produk berbasis solusi nyata bagi lingkungan sekolah."
+                ],
+                snippet: `<!-- Checklist Kesiapan Publikasi Web Kelas 12:\n  [✓] Tidak ada error merah di Console (F12)\n  [✓] Antarmuka rapi saat dibuka dari HP\n  [✓] CRUD Supabase berjalan lancar\n  [✓] Repositori GitHub memiliki README deskripsi\n  [✓] URL GitHub Pages dapat diakses semua orang -->`,
+                activity: "Demonstrasikan aplikasi web kelompokmu di hadapan teman dan guru. Buka website langsung menggunakan smartphone masing-masing pengunjung!",
+                btnLink: "modul-16.html"
+            }
+        };
+
+        let currentActiveModalId = null;
+        let activeFilter = 'all';
+
+        function getProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) {
+                const initProgress = {};
+                for (let i = 1; i <= TOTAL_MODULES; i++) {
+                    initProgress[i] = (i === 1) ? 'current' : 'locked';
+                }
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initProgress));
+                return initProgress;
+            }
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            renderDashboard();
+        }
+
+        function resetAllProgress() {
+            if (confirm('Kembalikan status roadmap belajar ke konfigurasi awal (Modul 1)?')) {
+                const initProgress = {};
+                for (let i = 1; i <= TOTAL_MODULES; i++) {
+                    initProgress[i] = (i === 1) ? 'current' : 'locked';
+                }
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initProgress));
+                renderDashboard();
+                showToast('Progres berhasil direset ke Modul 1!', '🔄');
+            }
+        }
+
+        function renderDashboard() {
+            const progress = getProgress();
+            let completedCount = 0;
+            let currentActiveId = null;
+
+            for (let i = 1; i <= TOTAL_MODULES; i++) {
+                if (progress[i] === 'completed') {
+                    completedCount++;
+                } else if (progress[i] === 'current' && !currentActiveId) {
+                    currentActiveId = i;
+                }
+            }
+
+            const percentage = Math.round((completedCount / TOTAL_MODULES) * 100);
+
+            // Update Progress Bar
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-percent').innerText = `${percentage}% Selesai (${completedCount}/${TOTAL_MODULES} Modul)`;
+            document.getElementById('progress-count').innerHTML = `${String(completedCount).padStart(2, '0')}<span style="font-size: 1rem; color: var(--text-muted);">/${TOTAL_MODULES}</span>`;
+
+            if (currentActiveId) {
+                document.getElementById('nav-active-text').innerText = `Modul ${currentActiveId} / ${TOTAL_MODULES} Aktif`;
+            } else if (completedCount === TOTAL_MODULES) {
+                document.getElementById('nav-active-text').innerText = `🎉 16 Modul Tuntas Sempurna!`;
+            } else {
+                document.getElementById('nav-active-text').innerText = `Modul Belajar Aktif`;
+            }
+
+            // Render Timeline Cards
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= TOTAL_MODULES; i++) {
+                const item = moduleData[i];
+                const status = progress[i] || 'locked';
+
+                let statusBadgeHTML = '';
+                let nodeBadgeHTML = '';
+                let footerText = '';
+                let actionBtnHTML = '';
+
+                if (status === 'completed') {
+                    nodeBadgeHTML = `<div class="node-badge">✓</div>`;
+                    statusBadgeHTML = `<span class="tag-status tag-completed">✅ SELESAI</span>`;
+                    footerText = `<span>Buka Ulang Rangkuman Modul →</span>`;
+                    actionBtnHTML = `<span style="font-size: 0.85rem; color: #10B981; font-weight: 600;">Selesai ✓</span>`;
+                } else if (status === 'current') {
+                    nodeBadgeHTML = `<div class="node-badge">${String(i).padStart(2, '0')}</div>`;
+                    statusBadgeHTML = `<span class="tag-status tag-current">👈 SEDANG AKTIF</span>`;
+                    footerText = `<span style="color: #38BDF8; font-weight:700;">👉 Klik untuk Buka Petunjuk Modul ${i}</span>`;
+                    actionBtnHTML = `<span class="btn-launch" onclick="event.stopPropagation(); openModal(${i})">Buka Modul 🚀</span>`;
+                } else {
+                    nodeBadgeHTML = `<div class="node-badge">🔒</div>`;
+                    statusBadgeHTML = `<span class="tag-status tag-locked">🔒 BELUM DIBUKA</span>`;
+                    footerText = `<span style="color: var(--text-muted);">Selesaikan modul sebelumnya untuk membuka</span>`;
+                    actionBtnHTML = `<span style="font-size: 1rem; opacity: 0.4;">🔒</span>`;
+                }
+
+                const cardHTML = `
+                    <div class="roadmap-card status-${status}" data-status="${status}" onclick="openModal(${i})">
+                        ${nodeBadgeHTML}
+                        <div class="card-body">
+                            <div class="card-meta">
+                                <span class="step-label">MODUL ${String(i).padStart(2, '0')} • ${item.element}</span>
+                                ${statusBadgeHTML}
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">⏱️ ${item.duration}</span>
+                            </div>
+                            <div class="card-title">
+                                <span>${i}. ${item.title}</span>
+                                ${actionBtnHTML}
+                            </div>
+                            <p class="card-desc">${item.desc}</p>
+                            <div class="card-tags">
+                                ${item.tags.map(t => `<span class="topic-pill">${t}</span>`).join('')}
+                            </div>
+                            <div class="card-footer-action">
+                                ${footerText}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            }
+
+            applyFilterToCards(activeFilter);
+        }
+
+        function openModal(id) {
+            currentActiveModalId = id;
+            const data = moduleData[id];
+            const progress = getProgress();
+            const status = progress[id] || 'locked';
+
+            document.getElementById('modalMeta').innerText = `MODUL ${String(id).padStart(2, '0')} • ${data.element}`;
+            document.getElementById('modalTitle').innerText = `${id}. ${data.title}`;
+            
+            document.getElementById('modalGoals').innerHTML = data.goals.map(g => `<li>${g}</li>`).join('');
+            document.getElementById('modalTopics').innerHTML = data.topics.map(t => `<li>${t}</li>`).join('');
+            document.getElementById('modalSnippet').innerHTML = `<pre><code>${data.snippet}</code></pre>`;
+            document.getElementById('modalActivity').innerText = data.activity;
+            
+            const mainBtn = document.getElementById('modalActionBtn');
+            mainBtn.href = data.btnLink;
+            mainBtn.innerText = (status === 'completed') ? 'Buka Review Modul ↗' : 'Buka Halaman Modul 🚀';
+
+            const toggleBtn = document.getElementById('modalToggleBtn');
+            if (status === 'completed') {
+                toggleBtn.className = 'btn-toggle-status undo';
+                toggleBtn.innerHTML = '↩️ Tandai Belum Selesai';
+            } else {
+                toggleBtn.className = 'btn-toggle-status';
+                toggleBtn.innerHTML = '✅ Tandai Sudah Selesai';
+            }
+
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function toggleCurrentModuleStatus() {
+            if (!currentActiveModalId) return;
+            const id = currentActiveModalId;
+            const progress = getProgress();
+
+            if (progress[id] === 'completed') {
+                progress[id] = 'current';
+                showToast(`Modul ${id} kembali berstatus 'Sedang Dipelajari'`, 'ℹ️');
+            } else {
+                progress[id] = 'completed';
+                if (id + 1 <= TOTAL_MODULES && progress[id + 1] === 'locked') {
+                    progress[id + 1] = 'current';
+                }
+                showToast(`Keren! Modul ${id} berhasil diselesaikan! 🎉`, '🎉');
+            }
+
+            saveProgress(progress);
+            openModal(id);
+        }
+
+        function closeModal(event) {
+            if (event.target.id === 'detailModal') {
+                document.getElementById('detailModal').classList.remove('active');
+            }
+        }
+
+        function forceCloseModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        function filterRoadmap(status, btnElement) {
+            activeFilter = status;
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+            applyFilterToCards(status);
+        }
+
+        function applyFilterToCards(status) {
+            const cards = document.querySelectorAll('.roadmap-card');
+            cards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+                if (status === 'all' || cardStatus === status) {
+                    card.style.display = 'grid';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function showToast(message, icon = '✅') {
+            const toast = document.getElementById('toastBox');
+            document.getElementById('toastMsg').innerText = message;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') forceCloseModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+        });
+    </script>
+</body>
+</html>
