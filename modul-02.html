@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 02: Formulir Input Interaktif | Informatika Kelas 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-alt: #1E293B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.25);
+            --accent-amber: #F59E0B;
+            --accent-purple: #A855F7;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 30%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1050px; margin: 0 auto; padding: 1.5rem 1.25rem 5rem 1.25rem; }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .nav-title { font-size: 0.9rem; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
+
+        .complete-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-badge-done { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge-active { background: rgba(56, 189, 248, 0.15); color: #7DD3FC; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .module-header {
+            background: linear-gradient(180deg, rgba(20, 35, 55, 0.6) 0%, rgba(19, 27, 46, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-meta { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .module-title { font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.8rem; line-height: 1.3; }
+        .module-desc { color: #CBD5E1; font-size: 0.95rem; max-width: 850px; }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tab-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #0B0F19;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 { font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-bottom: 1rem; }
+        .content-card h4 { font-size: 1.05rem; font-weight: 700; color: #38BDF8; margin: 1.5rem 0 0.6rem 0; }
+        .content-card p { color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.65; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+        .callout-green { background: rgba(16, 185, 129, 0.08); border-left-color: var(--accent-green); }
+        .callout-amber { background: rgba(245, 158, 11, 0.08); border-left-color: var(--accent-amber); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.2rem 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content-card { padding: 1.25rem; }
+        }
+
+        .sub-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .sub-card-title { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.5rem; }
+        .sub-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; border-radius: 12px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        th { background: rgba(255, 255, 255, 0.04); color: var(--primary); font-weight: 700; }
+        code.inline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #7DD3FC;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A7F3D0;
+        }
+
+        .sandbox-container {
+            background: #0D1322;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .sandbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        @media (max-width: 768px) { .sandbox-grid { grid-template-columns: 1fr; } }
+
+        .code-textarea {
+            width: 100%;
+            height: 270px;
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+        }
+        .code-textarea:focus { border-color: var(--primary); }
+        .preview-iframe {
+            width: 100%;
+            height: 270px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .step-list { list-style: none; counter-reset: step-counter; margin: 1rem 0; }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary);
+        }
+
+        .quiz-progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38BDF8, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .quiz-question { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.8rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quiz-opt {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #CBD5E1;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .quiz-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+        .quiz-opt.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10B981 !important;
+            color: #34D399 !important;
+            font-weight: 700;
+        }
+        .quiz-opt.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #EF4444 !important;
+            color: #F87171 !important;
+        }
+        .quiz-opt:disabled { cursor: not-allowed; opacity: 0.9; }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.12); color: #34D399; border-left: 4px solid #10B981; }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.12); color: #FCA5A5; border-left: 4px solid #EF4444; }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, rgba(20, 35, 60, 0.9), rgba(19, 27, 46, 0.95));
+            border: 1px solid #38BDF8;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .bottom-bar {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-action-primary:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #10B981;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="index.html" class="btn-back">← Kembali ke Roadmap</a>
+            <div class="nav-title">MODUL 02 • INTERAKSI INPUT</div>
+            <div id="moduleStatusBadge" class="complete-status-badge status-badge-active">
+                <span>⚡</span>
+                <span id="statusBadgeText">Sedang Dipelajari</span>
+            </div>
+        </nav>
+
+        <header class="module-header">
+            <div class="module-meta">
+                <span class="tag-pill">Fase F (Kelas 12)</span>
+                <span class="tag-pill" style="background: rgba(16,185,129,0.15); color:#34D399; border-color: rgba(16,185,129,0.3);">⏱️ Pertemuan 3–4 (4 JP)</span>
+                <span class="tag-pill" style="background: rgba(168,85,247,0.15); color:#C084FC; border-color: rgba(168,85,247,0.3);">Proyek Web Supabase</span>
+            </div>
+            <h1 class="module-title">Formulir Input Data Interaktif (Forms & Controls)</h1>
+            <p class="module-desc">
+                Pelajari pintu gerbang pengumpulan data pengguna: membungkus kolom input dengan tag <code>&lt;form&gt;</code>, mengeksplorasi ragam tipe input, dropdown, area teks panjang, tombol pengirim, serta validasi bawaan browser sebelum data diteruskan ke basis data cloud.
+            </p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-konsep', this)">📦 1. Konsep & Tag Form</button>
+            <button class="tab-btn" onclick="switchTab('tab-elemen', this)">🎛️ 2. Ragam Elemen Input</button>
+            <button class="tab-btn" onclick="switchTab('tab-atribut', this)">⚙️ 3. Atribut & Validasi</button>
+            <button class="tab-btn" onclick="switchTab('tab-sandbox', this)">🧪 4. Live Sandbox</button>
+            <button class="tab-btn" onclick="switchTab('tab-praktik', this)">🚀 5. Panduan Praktik</button>
+            <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🎯 6. Kuis Pemahaman (10 Soal)</button>
+        </div>
+
+        <!-- Tab 1: Konsep -->
+        <section id="tab-konsep" class="tab-pane active">
+            <div class="content-card">
+                <h3>📦 Analogi Formulir Web: Lembar Isian Buku Tamu Sekolah</h3>
+                <p>
+                    Jika Modul 01 mengajarkan kita membuat tulisan yang hanya bisa <em>dibaca</em> oleh pengunjung, Modul 02 ini membuka kemampuan web untuk <strong>mendengarkan dan mengumpulkan data</strong> dari pengunjung.
+                </p>
+
+                <div class="grid-3">
+                    <div class="sub-card" style="border-top: 3px solid #38BDF8;">
+                        <div class="sub-card-title">📋 1. Tag &lt;form&gt; (Map Berkas)</div>
+                        <p>Wadah pembungkus yang bertugas mengumpulkan semua kolom isian menjadi satu paket data utuh saat tombol submit ditekan.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #10B981;">
+                        <div class="sub-card-title">✍️ 2. Kolom Isian (Controls)</div>
+                        <p>Komponen tempat pengguna mengetik teks, memilih tanggal, mencentang opsi, atau menulis aspirasi panjang.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #F59E0B;">
+                        <div class="sub-card-title">🚀 3. Submit Button (Kurir Pengirim)</div>
+                        <p>Tombol pemicu yang memberi sinyal ke JavaScript atau database bahwa isian formulir sudah selesai diketik dan siap disimpan.</p>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <strong>Penting untuk Proyek Supabase Nanti:</strong> Seluruh data formulir yang kamu rangkai di modul ini nantinya akan ditangkap oleh JavaScript (Modul 06) dan dikirim langsung ke baris tabel Supabase PostgreSQL (Modul 13).
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Elemen Input -->
+        <section id="tab-elemen" class="tab-pane">
+            <div class="content-card">
+                <h3>🎛️ Ragam Elemen Input & Kontrol Antarmuka</h3>
+                <p>HTML menyediakan elemen input spesifik agar keyboard ponsel atau komputer otomatis menyesuaikan tipe data yang dimasukkan pengguna:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen / Tipe</th>
+                                <th>Contoh Kode</th>
+                                <th>Kegunaan Nyata</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code class="inline">type="text"</code></td>
+                                <td><code class="inline">&lt;input type="text"&gt;</code></td>
+                                <td>Isian satu baris untuk nama lengkap, judul buku, username.</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline">type="number"</code></td>
+                                <td><code class="inline">&lt;input type="number"&gt;</code></td>
+                                <td>Isian angka: umur, jumlah barang kantin, nominal uang kas.</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline">type="email"</code></td>
+                                <td><code class="inline">&lt;input type="email"&gt;</code></td>
+                                <td>Alamat surel (otomatis memvalidasi tanda @ di browser).</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline">&lt;textarea&gt;</code></td>
+                                <td><code class="inline">&lt;textarea rows="3"&gt;&lt;/textarea&gt;</code></td>
+                                <td>Kotak multi-baris untuk saran, deskripsi keluhan, aspirasi.</td>
+                            </tr>
+                            <tr>
+                                <td><code class="inline">&lt;select&gt;</code></td>
+                                <td><code class="inline">&lt;select&gt;&lt;option&gt;...&lt;/option&gt;&lt;/select&gt;</code></td>
+                                <td>Pilihan menu tarik-turun (dropdown), misal memilih kelas atau kategori.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout callout-green">
+                    <strong>Pasangan Tag &lt;label&gt; dan Atribut "id":</strong> Selalu gunakan tag <code>&lt;label for="namaId"&gt;</code> untuk memberi keterangan nama kolom. Saat teks label diklik di layar HP, kursor otomatis masuk ke kotak input yang dituju!
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Atribut & Validasi -->
+        <section id="tab-atribut" class="tab-pane">
+            <div class="content-card">
+                <h3>⚙️ Atribut Kunci & Validasi Bawaan Browser</h3>
+                <p>Tanpa menulis kode JavaScript rumit, browser dapat mencegah pengguna mengirim formulir yang masih kosong atau formatnya keliru menggunakan atribut bawaan berikut:</p>
+
+                <div class="grid-2">
+                    <div class="sub-card">
+                        <div class="sub-card-title">🔒 required</div>
+                        <p>Menandai bahwa kolom tersebut wajib diisi. Jika dibiarkan kosong, browser akan menampilkan pop-up peringatan otomatis saat tombol kirim ditekan.</p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">💡 placeholder</div>
+                        <p>Teks samar abu-abu di dalam kotak input sebagai contoh format pengisian yang hilang saat pengguna mulai mengetik.</p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">🆔 id & name</div>
+                        <p><code>id</code> digunakan oleh JavaScript dan CSS untuk membidik elemen spesifik, sedangkan <code>name</code> menjadi penanda kunci saat formulir diproses backend/server.</p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">📏 min & max / maxlength</div>
+                        <p>Membatasi batas angka minimum/maksimum atau batas jumlah karakter teks yang boleh diketikkan siswa.</p>
+                    </div>
+                </div>
+
+                <pre><code>&lt;!-- Contoh Formulir Validasi Lengkap --&gt;
+&lt;label for="inputNama"&gt;Nama Lengkap:&lt;/label&gt;
+&lt;input type="text" id="inputNama" name="nama" placeholder="Contoh: Budi Santoso" required&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Tab 4: Sandbox -->
+        <section id="tab-sandbox" class="tab-pane">
+            <div class="content-card">
+                <h3>🧪 Live Code Sandbox: Simulasi Formulir Interaktif</h3>
+                <p>Ujilah interaktivitas formulir di bawah! Klik <strong>"Kirim Laporan"</strong> saat kolom kosong untuk melihat validasi otomatis browser:</p>
+
+                <div class="sandbox-container">
+                    <div class="sandbox-grid">
+                        <div>
+                            <textarea id="liveCodeEditor" class="code-textarea" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="font-family: sans-serif; padding: 15px; color: #0F172A;"&gt;
+  &lt;h2 style="color: #0284C7;"&gt;Buku Tamu Kelas 12&lt;/h2&gt;
+  &lt;form onsubmit="alert('Data berhasil divalidasi dan siap dikirim!'); return false;"&gt;
+    &lt;label for="nama"&gt;&lt;strong&gt;Nama Siswa:&lt;/strong&gt;&lt;/label&gt;&lt;br&gt;
+    &lt;input type="text" id="nama" placeholder="Tulis namamu..." required style="width: 100%; padding: 6px; margin: 4px 0 10px 0;"&gt;
+
+    &lt;label for="kategori"&gt;&lt;strong&gt;Kategori Aspirasi:&lt;/strong&gt;&lt;/label&gt;&lt;br&gt;
+    &lt;select id="kategori" style="width: 100%; padding: 6px; margin: 4px 0 10px 0;"&gt;
+      &lt;option value="akademik"&gt;Pelajaran / Ujian&lt;/option&gt;
+      &lt;option value="fasilitas"&gt;Fasilitas Lab Komputer&lt;/option&gt;
+      &lt;option value="ekskul"&gt;Kegiatan Sekolah&lt;/option&gt;
+    &lt;/select&gt;
+
+    &lt;label for="pesan"&gt;&lt;strong&gt;Pesan Catatan:&lt;/strong&gt;&lt;/label&gt;&lt;br&gt;
+    &lt;textarea id="pesan" rows="3" placeholder="Tuliskan aspirasimu di sini..." required style="width: 100%; padding: 6px; margin: 4px 0 10px 0;"&gt;&lt;/textarea&gt;
+
+    &lt;button type="submit" style="background: #0284C7; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;"&gt;
+      Kirim Laporan 🚀
+    &lt;/button&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                            <button class="btn-run" onclick="runSandboxPreview()">Jalankan Formulir ▶</button>
+                        </div>
+                        <div>
+                            <iframe id="livePreviewFrame" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Praktik Lab -->
+        <section id="tab-praktik" class="tab-pane">
+            <div class="content-card">
+                <h3>🚀 Panduan Praktik Nyata: Formulir Buku Tamu / Kas Kelas</h3>
+                <p>Buka berkas latihanmu di komputer lab atau laptop dan ikuti alur berikut:</p>
+
+                <ol class="step-list">
+                    <li>
+                        <strong>Buka Proyekmu di VS Code / Notepad:</strong>
+                        <p>Buka berkas <code>index.html</code> yang sudah kamu buat pada Modul 01.</p>
+                    </li>
+                    <li>
+                        <strong>Tambahkan Wadah Formulir di dalam &lt;body&gt;:</strong>
+                        <p>Tuliskan tag pembungkus <code>&lt;form id="formAspirasi"&gt; ... &lt;/form&gt;</code> tepat di bawah paragraf perkenalan profilmu.</p>
+                    </li>
+                    <li>
+                        <strong>Sisipkan Minimal 3 Elemen Input:</strong>
+                        <p>Sertakan 1 input teks (Nama), 1 dropdown <code>&lt;select&gt;</code> (Pilihan Kategori), dan 1 <code>&lt;textarea&gt;</code> (Pesan).</p>
+                    </li>
+                    <li>
+                        <strong>Pasang Validasi "required" & Tombol Submit:</strong>
+                        <p>Tambahkan atribut <code>required</code> agar kotak tidak boleh kosong, lalu akhiri dengan tag <code>&lt;button type="submit"&gt;Kirim Data&lt;/button&gt;</code>.</p>
+                    </li>
+                    <li>
+                        <strong>Simpan & Uji Coba di Browser:</strong>
+                        <p>Tekan <em>Ctrl + S</em>, lalu refresh browsermu. Coba tekan tombol kirim tanpa mengisi nama untuk membuktikan validasi browser bekerja!</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tab 6: Kuis -->
+        <section id="tab-quiz" class="tab-pane">
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>🎯 Uji Pemahaman: Formulir Input Interaktif (10 Soal)</h3>
+                    <div id="quizProgressText" style="font-size: 0.85rem; font-weight: 700; color: #38BDF8;">Dijawab: 0 / 10 Soal</div>
+                </div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressBar"></div>
+                </div>
+                <p style="margin-bottom: 1.5rem;">Pilih satu opsi jawaban yang paling tepat pada masing-masing soal di bawah ini:</p>
+
+                <div id="quizContainer"></div>
+
+                <div class="quiz-score-box" id="quizScoreBox">
+                    <h4 style="font-size: 1.4rem; color: #38BDF8; margin-bottom: 0.4rem;" id="quizScoreTitle">Skor Kamu: 0 / 100</h4>
+                    <p id="quizScoreFeedback" style="color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1.2rem;"></p>
+                    <button class="btn-run" onclick="resetQuiz()">Ulangi Kuis 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-bar">
+            <div>
+                <h4 style="font-size: 1rem; color: #F8FAFC;">Sudah Menguasai Materi Modul 02?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Tandai modul ini tuntas agar Modul 03 (Styling Antarmuka & CSS Flexbox) terbuka di Dashboard.</p>
+            </div>
+            <div>
+                <button class="btn-action-primary" id="btnMarkComplete" onclick="markModuleComplete()">
+                    <span>✅ Tandai Selesai & Buka Modul 03 🚀</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast" id="toastMsg">
+        <span id="toastIcon">🎉</span>
+        <span id="toastText">Status berhasil disimpan!</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const CURRENT_MODULE_ID = 2;
+
+        const quizData = [
+            {
+                q: "1. Tag HTML utama yang berfungsi sebagai wadah untuk membungkus seluruh elemen isian formulir adalah...",
+                opts: ["<input>", "<form>", "<section>", "<fieldset>"],
+                answer: 1,
+                explain: "Tag <form> berfungsi sebagai kontainer utama yang mengelompokkan input pengguna agar dapat diproses atau dikirim secara terpadu."
+            },
+            {
+                q: "2. Tipe input apa yang paling tepat digunakan untuk mengumpulkan data angka seperti umur atau nominal saldo kas?",
+                opts: ["type='text'", "type='number'", "type='digit'", "type='math'"],
+                answer: 1,
+                explain: "Input bertipe 'number' mengkhususkan kotak isian untuk menerima nilai numerik dan memunculkan keypad angka di ponsel cerdas."
+            },
+            {
+                q: "3. Elemen mana yang paling cocok jika kita ingin pengguna menuliskan catatan atau aspirasi panjang lebih dari satu baris?",
+                opts: ["<input type='long'>", "<textarea>", "<paragraph>", "<textbox>"],
+                answer: 1,
+                explain: "Tag <textarea> dirancang untuk menerima input teks multi-baris dengan ukuran tinggi yang fleksibel."
+            },
+            {
+                q: "4. Atribut HTML apa yang wajib disematkan pada kotak input agar pengguna tidak bisa mengirimkan formulir dalam keadaan kosong?",
+                opts: ["validate", "mandatory", "required", "lock"],
+                answer: 2,
+                explain: "Atribut 'required' mengaktifkan validasi bawaan browser untuk menolak pengiriman formulir jika kolom belum diisi."
+            },
+            {
+                q: "5. Apa fungsi dari atribut 'placeholder' pada sebuah elemen <input>?",
+                opts: [
+                    "Mengunci input agar nilainya tidak bisa diubah",
+                    "Menampilkan teks petunjuk samar di dalam kotak yang hilang saat mulai diketik",
+                    "Mengubah warna teks secara permanen",
+                    "Menyimpan nilai data langsung ke server cloud"
+                ],
+                answer: 1,
+                explain: "Placeholder menyajikan teks visual pembantu di dalam field input guna memberikan contoh format data yang diharapkan."
+            },
+            {
+                q: "6. Tag apa yang digunakan untuk membuat pilihan menu tarik-turun (dropdown list)?",
+                opts: ["<dropdown>", "<select>", "<options>", "<listbox>"],
+                answer: 1,
+                explain: "Tag <select> (yang dikombinasikan dengan tag anak <option>) membentuk kontrol pilihan menu dropdown di HTML."
+            },
+            {
+                q: "7. Bagaimana cara menghubungkan tag <label> dengan kotak <input> secara semantik agar saat label diklik kotak input otomatis aktif?",
+                opts: [
+                    "Menyamakan atribut 'for' pada label dengan atribut 'id' pada input",
+                    "Menyamakan atribut 'class' pada keduanya",
+                    "Meletakkan label di luar dokumen HTML",
+                    "Memberikan warna latar yang identik"
+                ],
+                answer: 0,
+                explain: "Atribut 'for' pada <label> yang merujuk pada nilai 'id' pada <input> menciptakan ikatan aksesibilitas resmi antar kedua elemen."
+            },
+            {
+                q: "8. Tipe tombol apa yang digunakan untuk memicu proses verifikasi dan pengiriman data formulir?",
+                opts: ["type='button'", "type='reset'", "type='submit'", "type='send'"],
+                answer: 2,
+                explain: "Tombol dengan type='submit' adalah pemicu standar peramban untuk memproses pengiriman data form."
+            },
+            {
+                q: "9. Apa keunggulan menggunakan <input type='email'> dibanding <input type='text'> biasa?",
+                opts: [
+                    "Pesan langsung terkirim ke Gmail tanpa aplikasi lain",
+                    "Browser otomatis memeriksa apakah input pengguna mengandung format email yang sah (seperti adanya tanda @)",
+                    "Menyembunyikan karakter huruf menjadi bintang",
+                    "Mempercepat kecepatan internet pengguna"
+                ],
+                answer: 1,
+                explain: "Input bertipe email secara otomatis menyertakan validasi sintaks alamat email standar sebelum form diizinkan terkirim."
+            },
+            {
+                q: "10. Dalam arsitektur aplikasi web modern yang akan kita bangun bersama Supabase, fungsi formulir HTML adalah sebagai...",
+                opts: [
+                    "Penyimpan database permanen di laptop",
+                    "Antarmuka penangkap data mentah dari pengguna sebelum diolah JavaScript dan dikirim ke Cloud",
+                    "Pengganti koneksi internet",
+                    "Server hosting repositori kode"
+                ],
+                answer: 1,
+                explain: "Formulir berfungsi sebagai pintu gerbang antarmuka (Front-End) untuk menampung masukan user sebelum dikirim ke basis data Supabase via JavaScript."
+            }
+        ];
+
+        let answeredMap = {};
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tab-sandbox') {
+                runSandboxPreview();
+            } else if (tabId === 'tab-quiz') {
+                if (!document.getElementById('quizContainer').hasChildNodes()) {
+                    renderQuiz();
+                }
+            }
+        }
+
+        function runSandboxPreview() {
+            const code = document.getElementById('liveCodeEditor').value;
+            const iframe = document.getElementById('livePreviewFrame');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `quiz-card-${qIdx}`;
+
+                const title = document.createElement('div');
+                title.className = 'quiz-question';
+                title.textContent = item.q;
+                card.appendChild(title);
+
+                const optsBox = document.createElement('div');
+                optsBox.className = 'quiz-options';
+
+                item.opts.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-opt';
+                    btn.id = `opt-${qIdx}-${optIdx}`;
+                    btn.textContent = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                    btn.addEventListener('click', () => handleQuizAnswer(qIdx, optIdx));
+                    optsBox.appendChild(btn);
+                });
+                card.appendChild(optsBox);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'quiz-feedback';
+                feedback.id = `feedback-${qIdx}`;
+                card.appendChild(feedback);
+
+                container.appendChild(card);
+            });
+
+            updateQuizProgressUI();
+        }
+
+        function handleQuizAnswer(qIdx, selectedIdx) {
+            if (answeredMap.hasOwnProperty(qIdx)) return;
+
+            const q = quizData[qIdx];
+            answeredMap[qIdx] = selectedIdx;
+
+            const optButtons = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const chosenBtn = document.getElementById(`opt-${qIdx}-${selectedIdx}`);
+            const correctBtn = document.getElementById(`opt-${qIdx}-${q.answer}`);
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+
+            if (selectedIdx === q.answer) {
+                chosenBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-correct';
+                feedbackEl.innerHTML = `<strong>✓ Benar!</strong> ${q.explain}`;
+            } else {
+                chosenBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-wrong';
+                feedbackEl.innerHTML = `<strong>✗ Belum Tepat!</strong> Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.answer)}. ${q.opts[q.answer]}</strong>.<br>${q.explain}`;
+            }
+
+            updateQuizProgressUI();
+
+            if (Object.keys(answeredMap).length === quizData.length) {
+                showQuizResult();
+            }
+        }
+
+        function updateQuizProgressUI() {
+            const answeredCount = Object.keys(answeredMap).length;
+            const percent = Math.round((answeredCount / quizData.length) * 100);
+            
+            document.getElementById('quizProgressText').innerText = `Dijawab: ${answeredCount} / ${quizData.length} Soal`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function showQuizResult() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (answeredMap[idx] === q.answer) correctCount++;
+            });
+
+            const score = correctCount * 10;
+            const scoreBox = document.getElementById('quizScoreBox');
+            const scoreTitle = document.getElementById('quizScoreTitle');
+            const scoreFeedback = document.getElementById('quizScoreFeedback');
+
+            scoreTitle.innerText = `Skor Akhir Kamu: ${score} / 100 (${correctCount} dari 10 Soal Benar)`;
+            if (score >= 80) {
+                scoreFeedback.innerText = "Luar biasa! Pemahamanmu mengenai formulir input interaktif sudah matang. Siap lanjut ke Modul 03 (Styling CSS & Flexbox)!";
+            } else if (score >= 60) {
+                scoreFeedback.innerText = "Bagus! Kamu sudah memahami kontrol input umum. Coba tinjau kembali atribut validasi agar semakin paham.";
+            } else {
+                scoreFeedback.innerText = "Tetap semangat! Pelajari kembali materi elemen input pada tab di atas, lalu coba ulangi kuis ini.";
+            }
+
+            scoreBox.style.display = 'block';
+            scoreBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            answeredMap = {};
+            document.getElementById('quizScoreBox').style.display = 'none';
+            renderQuiz();
+        }
+
+        function getProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function updateProgressUI() {
+            const prog = getProgress();
+            const badge = document.getElementById('moduleStatusBadge');
+            const badgeText = document.getElementById('statusBadgeText');
+            const btnMark = document.getElementById('btnMarkComplete');
+
+            if (prog[CURRENT_MODULE_ID] === 'completed') {
+                badge.className = 'complete-status-badge status-badge-done';
+                badgeText.innerText = 'Sudah Selesai ✓';
+                btnMark.innerHTML = '<span>✓ Modul Selesai (Buka Halaman Modul 03 →)</span>';
+            } else {
+                badge.className = 'complete-status-badge status-badge-active';
+                badgeText.innerText = 'Sedang Dipelajari';
+                btnMark.innerHTML = '<span>✅ Tandai Selesai & Buka Modul 03 🚀</span>';
+            }
+        }
+
+        function markModuleComplete() {
+            const prog = getProgress();
+            prog[CURRENT_MODULE_ID] = 'completed';
+
+            if (!prog[3] || prog[3] === 'locked') {
+                prog[3] = 'current';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+            updateProgressUI();
+            showToast("Modul 02 selesai! Modul 03 (CSS Flexbox) kini terbuka di Dashboard 🎉", "🎉");
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        }
+
+        function showToast(text, icon = "✅") {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            runSandboxPreview();
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
