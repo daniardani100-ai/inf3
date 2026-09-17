@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 03: Styling Antarmuka & CSS Flexbox | Informatika Kelas 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-alt: #1E293B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.25);
+            --accent-amber: #F59E0B;
+            --accent-purple: #A855F7;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 30%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1050px; margin: 0 auto; padding: 1.5rem 1.25rem 5rem 1.25rem; }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .nav-title { font-size: 0.9rem; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
+
+        .complete-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-badge-done { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge-active { background: rgba(56, 189, 248, 0.15); color: #7DD3FC; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .module-header {
+            background: linear-gradient(180deg, rgba(20, 35, 55, 0.6) 0%, rgba(19, 27, 46, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-meta { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .module-title { font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.8rem; line-height: 1.3; }
+        .module-desc { color: #CBD5E1; font-size: 0.95rem; max-width: 850px; }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tab-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #0B0F19;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 { font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-bottom: 1rem; }
+        .content-card h4 { font-size: 1.05rem; font-weight: 700; color: #38BDF8; margin: 1.5rem 0 0.6rem 0; }
+        .content-card p { color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.65; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+        .callout-green { background: rgba(16, 185, 129, 0.08); border-left-color: var(--accent-green); }
+        .callout-amber { background: rgba(245, 158, 11, 0.08); border-left-color: var(--accent-amber); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.2rem 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content-card { padding: 1.25rem; }
+        }
+
+        .sub-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .sub-card-title { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.5rem; }
+        .sub-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+        code.inline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #7DD3FC;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A7F3D0;
+        }
+
+        /* Box Model Interactive Demo */
+        .box-model-demo {
+            background: #0D1322;
+            border: 2px dashed rgba(56, 189, 248, 0.4);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .box-margin {
+            background: rgba(245, 158, 11, 0.2);
+            border: 2px dashed #F59E0B;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .box-border {
+            background: rgba(56, 189, 248, 0.2);
+            border: 2px solid #38BDF8;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .box-padding {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px dashed #10B981;
+            padding: 1.5rem;
+            border-radius: 6px;
+        }
+
+        .box-content {
+            background: #1E293B;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Flexbox Interactive Playground */
+        .playground-container {
+            background: #0D1322;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            background: #151D2F;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .control-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #38BDF8;
+            text-transform: uppercase;
+        }
+
+        .control-group select {
+            background: #0B0F19;
+            border: 1px solid var(--border-color);
+            color: #F8FAFC;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .control-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .flex-stage {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-height: 220px;
+            padding: 1rem;
+            display: flex;
+            transition: all 0.3s ease;
+        }
+
+        .flex-item {
+            background: linear-gradient(135deg, #1E293B, #0F172A);
+            border: 1px solid var(--primary);
+            color: #38BDF8;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Sandbox */
+        .sandbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        @media (max-width: 768px) { .sandbox-grid { grid-template-columns: 1fr; } }
+
+        .code-textarea {
+            width: 100%;
+            height: 290px;
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+        }
+        .code-textarea:focus { border-color: var(--primary); }
+        .preview-iframe {
+            width: 100%;
+            height: 290px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .step-list { list-style: none; counter-reset: step-counter; margin: 1rem 0; }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary);
+        }
+
+        /* Quiz UI */
+        .quiz-progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38BDF8, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .quiz-question { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.8rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quiz-opt {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #CBD5E1;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .quiz-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+        .quiz-opt.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10B981 !important;
+            color: #34D399 !important;
+            font-weight: 700;
+        }
+        .quiz-opt.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #EF4444 !important;
+            color: #F87171 !important;
+        }
+        .quiz-opt:disabled { cursor: not-allowed; opacity: 0.9; }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.12); color: #34D399; border-left: 4px solid #10B981; }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.12); color: #FCA5A5; border-left: 4px solid #EF4444; }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, rgba(20, 35, 60, 0.9), rgba(19, 27, 46, 0.95));
+            border: 1px solid #38BDF8;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .bottom-bar {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-action-primary:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #10B981;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="index.html" class="btn-back">← Kembali ke Roadmap</a>
+            <div class="nav-title">MODUL 03 • DESAIN & TATA LETAK</div>
+            <div id="moduleStatusBadge" class="complete-status-badge status-badge-active">
+                <span>⚡</span>
+                <span id="statusBadgeText">Sedang Dipelajari</span>
+            </div>
+        </nav>
+
+        <header class="module-header">
+            <div class="module-meta">
+                <span class="tag-pill">Fase F (Kelas 12)</span>
+                <span class="tag-pill" style="background: rgba(16,185,129,0.15); color:#34D399; border-color: rgba(16,185,129,0.3);">⏱️ Pertemuan 5–6 (4 JP)</span>
+                <span class="tag-pill" style="background: rgba(168,85,247,0.15); color:#C084FC; border-color: rgba(168,85,247,0.3);">Proyek Web Supabase</span>
+            </div>
+            <h1 class="module-title">Styling Antarmuka & Tata Letak Responsif (CSS Flexbox)</h1>
+            <p class="module-desc">
+                Ubah halaman HTML polos menjadi aplikasi web modern yang sedap dipandang: kuasai selektor CSS, konsep Box Model (margin, padding, border), serta teknik tata letak modern berbasis CSS Flexbox agar formulir dan kartu data tampil proporsional di layar laptop maupun ponsel cerdas.
+            </p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-dasar', this)">🎨 1. Selektor & Sintaks CSS</button>
+            <button class="tab-btn" onclick="switchTab('tab-boxmodel', this)">📦 2. Konsep Box Model</button>
+            <button class="tab-btn" onclick="switchTab('tab-flexbox', this)">📐 3. Flexbox Playground</button>
+            <button class="tab-btn" onclick="switchTab('tab-sandbox', this)">🧪 4. Live Code Editor</button>
+            <button class="tab-btn" onclick="switchTab('tab-praktik', this)">🚀 5. Panduan Praktik Lab</button>
+            <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🎯 6. Kuis Pemahaman (10 Soal)</button>
+        </div>
+
+        <!-- Tab 1: Selektor & Sintaks -->
+        <section id="tab-dasar" class="tab-pane active">
+            <div class="content-card">
+                <h3>🎨 Dasar Sintaks CSS: Memberi Gaya pada Kerangka HTML</h3>
+                <p>
+                    CSS (Cascading Style Sheets) bertindak seperti cat, keramik, dan penataan interior pada sebuah bangunan rumah. CSS memberi tahu browser bagaimana elemen HTML harus ditampilkan: jenis font, warna latar, spasi, hingga ukuran tombol.
+                </p>
+
+                <div class="grid-3">
+                    <div class="sub-card" style="border-top: 3px solid #38BDF8;">
+                        <div class="sub-card-title">🏷️ 1. Selektor Elemen Tag</div>
+                        <p>Membidik seluruh elemen dengan nama tag yang sama.<br><code class="inline">p { color: #CBD5E1; }</code></p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #10B981;">
+                        <div class="sub-card-title">🎯 2. Selektor Kelas (.class)</div>
+                        <p>Membidik sekelompok elemen yang memiliki tanda class khusus.<br><code class="inline">.card-box { padding: 16px; }</code></p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #F59E0B;">
+                        <div class="sub-card-title">🆔 3. Selektor ID (#id)</div>
+                        <p>Membidik tepat satu elemen unik di dalam dokumen.<br><code class="inline">#btnKirim { background: blue; }</code></p>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <strong>Cara Terbaik Menyematkan CSS untuk Pemula:</strong> Tuliskan aturan CSS di dalam tag <code>&lt;style&gt; ... &lt;/style&gt;</code> yang diletakkan di dalam blok <code>&lt;head&gt;</code> dokumen HTML-mu (Internal Styling).
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Box Model -->
+        <section id="tab-boxmodel" class="tab-pane">
+            <div class="content-card">
+                <h3>📦 Anatomi Box Model: Mengatur Spasi Elemen</h3>
+                <p>
+                    Setiap elemen di halaman web (tombol, kartu, judul, kotak teks) diperlakukan oleh browser sebagai sebuah <strong>kotak persegi 4 lapis</strong>:
+                </p>
+
+                <div class="box-model-demo">
+                    <div class="box-margin">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #F59E0B; margin-bottom: 6px;">MARGIN (Jarak Luar Elemen dengan Elemen Lain)</div>
+                        <div class="box-border">
+                            <div style="font-size: 0.8rem; font-weight: 700; color: #38BDF8; margin-bottom: 6px;">BORDER (Garis Batas / Bingkai Kotak)</div>
+                            <div class="box-padding">
+                                <div style="font-size: 0.8rem; font-weight: 700; color: #10B981; margin-bottom: 6px;">PADDING (Bantalan / Jarak Dalam antara Teks & Garis Batas)</div>
+                                <div class="box-content">
+                                    CONTENT (Isi Teks / Tombol / Gambar)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="sub-card">
+                        <div class="sub-card-title">📏 Perbedaan Margin vs Padding</div>
+                        <p><strong>Padding:</strong> Menambah ruang lega di <em>dalam</em> kotak tombol/kartu agar tulisan tidak menempel pada dinding garis tepi.<br><strong>Margin:</strong> Menciptakan celah jarak di <em>luar</em> kotak agar antarkartu tidak saling bertabrakan.</p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">✨ Sudut Membulat (border-radius)</div>
+                        <p>Gunakan properti <code class="inline">border-radius: 12px;</code> untuk mengubah sudut kotak yang tajam dan kaku menjadi melengkung halus khas antarmuka modern.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Flexbox Playground -->
+        <section id="tab-flexbox" class="tab-pane">
+            <div class="content-card">
+                <h3>📐 Laboratorium Interaktif CSS Flexbox</h3>
+                <p>
+                    Menyusun tata letak web secara manual sangat melelahkan. Dengan mengaktifkan <code class="inline">display: flex;</code> pada elemen pembungkus (kontainer), kamu bisa mengatur perataan elemen anak secara otomatis. Uji coba langsung pengaturannya di bawah:
+                </p>
+
+                <div class="playground-container">
+                    <div class="controls-row">
+                        <div class="control-group">
+                            <label>flex-direction (Arah Alur):</label>
+                            <select id="flexDirectionSelect" onchange="updateFlexStage()">
+                                <option value="row">row (Mendatar Ke Kanan)</option>
+                                <option value="column">column (Menurun Ke Bawah)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>justify-content (Perataan Sumbu Utama):</label>
+                            <select id="justifyContentSelect" onchange="updateFlexStage()">
+                                <option value="flex-start">flex-start (Rata Awal)</option>
+                                <option value="center">center (Rata Tengah)</option>
+                                <option value="flex-end">flex-end (Rata Akhir)</option>
+                                <option value="space-between">space-between (Beri Jarak Merata)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>gap (Celah Antar Kartu):</label>
+                            <select id="gapSelect" onchange="updateFlexStage()">
+                                <option value="8px">8px (Rapat)</option>
+                                <option value="16px" selected>16px (Ideal)</option>
+                                <option value="32px">32px (Renggang)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex-stage" id="flexStageBox">
+                        <div class="flex-item">Kartu 01</div>
+                        <div class="flex-item">Kartu 02</div>
+                        <div class="flex-item">Kartu 03</div>
+                    </div>
+                </div>
+
+                <div class="callout callout-green">
+                    <strong>Trik Tengah Layar (Perfect Center):</strong> Mengombinasikan <code class="inline">justify-content: center;</code> dan <code class="inline">align-items: center;</code> pada kontainer flex akan membuat kotak login atau formulir tepat berada di pusat layar pengguna!
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Sandbox -->
+        <section id="tab-sandbox" class="tab-pane">
+            <div class="content-card">
+                <h3>🧪 Live Code Editor: Merias Formulir Menjadi Kartu Modern</h3>
+                <p>
+                    Perhatikan bagaimana tag HTML biasa berubah drastis menjadi tampilan kartu aplikasi saat dipadukan dengan aturan CSS. Ubah warna atau padding-nya lalu klik <strong>"Jalankan Kode ▶"</strong>:
+                </p>
+
+                <div class="sandbox-grid">
+                    <div>
+                        <textarea id="liveCodeEditor" class="code-textarea" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style&gt;
+  body {
+    background-color: #0F172A;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    margin: 0;
+  }
+  .kartu-aspirasi {
+    background-color: #1E293B;
+    border: 1px solid #38BDF8;
+    border-radius: 12px;
+    padding: 20px;
+    width: 280px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+  h3 { color: #38BDF8; margin-top: 0; }
+  p { color: #CBD5E1; font-size: 14px; }
+  button {
+    background-color: #38BDF8;
+    color: #0F172A;
+    font-weight: bold;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="kartu-aspirasi"&gt;
+    &lt;h3&gt;Pojok Aspirasi 12&lt;/h3&gt;
+    &lt;p&gt;Formulir ini kini tampil elegan berkat perpaduan CSS Flexbox & Box Model.&lt;/p&gt;
+    &lt;button&gt;Buka Formulir 🚀&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                        <button class="btn-run" onclick="runSandboxPreview()">Jalankan Kode ▶</button>
+                    </div>
+                    <div>
+                        <iframe id="livePreviewFrame" class="preview-iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Praktik Lab -->
+        <section id="tab-praktik" class="tab-pane">
+            <div class="content-card">
+                <h3>🚀 Panduan Praktik Nyata: Menata Tampilan Formulir Web</h3>
+                <p>Terapkan gaya modern pada file proyek yang telah kamu bangun pada Modul 01 dan Modul 02:</p>
+
+                <ol class="step-list">
+                    <li>
+                        <strong>Buka File Proyekmu:</strong>
+                        <p>Buka berkas <code>index.html</code> di aplikasi teks editor VS Code atau Notepad.</p>
+                    </li>
+                    <li>
+                        <strong>Bungkus Formulir dengan Elemen &lt;div class="form-card"&gt;:</strong>
+                        <p>Bungkus seluruh tag <code>&lt;form&gt;</code> yang telah kamu buat dengan kontainer <code>&lt;div&gt;</code> agar mudah diberi gaya kotak kartu.</p>
+                    </li>
+                    <li>
+                        <strong>Sisipkan Tag &lt;style&gt; di dalam &lt;head&gt;:</strong>
+                        <p>Tambahkan blok <code>&lt;style&gt;</code> dan atur latar belakang (<code>background-color</code>), batas kotak (<code>border-radius</code>), serta ruang bantalan (<code>padding: 20px;</code>).</p>
+                    </li>
+                    <li>
+                        <strong>Ratakan Formulir Menggunakan Flexbox:</strong>
+                        <p>Atur elemen <code>body</code> dengan properti <code>display: flex; justify-content: center;</code> agar formulir berada tepat di tengah layar laptop atau monitor lab.</p>
+                    </li>
+                    <li>
+                        <strong>Simpan & Refresh Halaman Browser:</strong>
+                        <p>Tekan <em>Ctrl + S</em> dan periksa perubahan visualnya pada browser. Webmu kini tidak lagi terlihat seperti dokumen polos tahun 90-an!</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tab 6: Kuis -->
+        <section id="tab-quiz" class="tab-pane">
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>🎯 Uji Pemahaman: Styling CSS & Flexbox (10 Soal)</h3>
+                    <div id="quizProgressText" style="font-size: 0.85rem; font-weight: 700; color: #38BDF8;">Dijawab: 0 / 10 Soal</div>
+                </div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressBar"></div>
+                </div>
+                <p style="margin-bottom: 1.5rem;">Pilih satu opsi jawaban yang paling tepat pada masing-masing pertanyaan berikut:</p>
+
+                <div id="quizContainer"></div>
+
+                <div class="quiz-score-box" id="quizScoreBox">
+                    <h4 style="font-size: 1.4rem; color: #38BDF8; margin-bottom: 0.4rem;" id="quizScoreTitle">Skor Kamu: 0 / 100</h4>
+                    <p id="quizScoreFeedback" style="color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1.2rem;"></p>
+                    <button class="btn-run" onclick="resetQuiz()">Ulangi Kuis 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-bar">
+            <div>
+                <h4 style="font-size: 1rem; color: #F8FAFC;">Sudah Menguasai Materi Modul 03?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Tandai modul ini tuntas agar Modul 04 (Git & Publikasi Online di GitHub Pages) terbuka di Dashboard.</p>
+            </div>
+            <div>
+                <button class="btn-action-primary" id="btnMarkComplete" onclick="markModuleComplete()">
+                    <span>✅ Tandai Selesai & Buka Modul 04 🚀</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast" id="toastMsg">
+        <span id="toastIcon">🎉</span>
+        <span id="toastText">Status berhasil disimpan!</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const CURRENT_MODULE_ID = 3;
+
+        const quizData = [
+            {
+                q: "1. Apa kepanjangan dari singkatan CSS dalam dunia pengembangan web?",
+                opts: [
+                    "Computer Style Sheets",
+                    "Cascading Style Sheets",
+                    "Creative System Style",
+                    "Colorfull Super Sheets"
+                ],
+                answer: 1,
+                explain: "CSS adalah singkatan dari Cascading Style Sheets, bahasa standar yang digunakan untuk mengatur tata letak dan estetika dokumen HTML."
+            },
+            {
+                q: "2. Simbol penanda apa yang digunakan dalam aturan CSS untuk membidik elemen berdasarkan nama kelas (class)?",
+                opts: [
+                    "Tanda pagar (#)",
+                    "Tanda titik (.)",
+                    "Tanda bintang (*)",
+                    "Tanda seru (!)"
+                ],
+                answer: 1,
+                explain: "Selektor class selalu diawali dengan karakter titik (contoh: .card-box), sedangkan simbol tagar (#) digunakan untuk membidik ID unik."
+            },
+            {
+                q: "3. Dalam konsep Box Model, ruang bantalan yang memberi jarak di DALAM kotak antara konten teks dengan garis tepi disebut...",
+                opts: ["Margin", "Padding", "Border", "Outline"],
+                answer: 1,
+                explain: "Padding adalah ruang dalam yang memisahkan konten dari garis tepi (border), sedangkan margin adalah jarak luar antarelemen."
+            },
+            {
+                q: "4. Properti CSS apa yang digunakan untuk membuat sudut kotak kartu atau tombol menjadi melengkung/membulat?",
+                opts: ["border-style", "border-radius", "box-corner", "border-curve"],
+                answer: 1,
+                explain: "Properti 'border-radius' mengatur derajat kelengkungan sudut pada elemen kotak di CSS."
+            },
+            {
+                q: "5. Nilai properti apa yang wajib disematkan pada elemen pembungkus untuk mengaktifkan sistem tata letak Flexbox?",
+                opts: ["display: flex;", "display: block;", "layout: modern;", "position: absolute;"],
+                answer: 0,
+                explain: "Deklarasi 'display: flex;' pada elemen kontainer secara otomatis mengubah anak-anak elemen di dalamnya menjadi item fleksibel."
+            },
+            {
+                q: "6. Jika menggunakan Flexbox dengan arah mendatar (row), properti apa yang digunakan untuk meratakan item tepat di tengah secara horizontal?",
+                opts: [
+                    "align-items: center;",
+                    "justify-content: center;",
+                    "text-align: middle;",
+                    "float: center;"
+                ],
+                answer: 1,
+                explain: "Pada orientasi mendatar (row), 'justify-content: center;' bertugas menyejajarkan item tepat di tengah sumbu utama (main axis)."
+            },
+            {
+                q: "7. Properti praktis apa pada Flexbox yang digunakan untuk memberikan jarak/celah merata antar-kartu tanpa perlu mengetik margin berulang kali?",
+                opts: ["gap", "space-between", "distance", "split"],
+                answer: 0,
+                explain: "Properti 'gap' mengatur ukuran jarak celah horizontal dan vertikal antar-elemen di dalam kontainer flex secara instan."
+            },
+            {
+                q: "8. Di mana lokasi penulisan CSS internal yang paling dianjurkan di dalam berkas HTML?",
+                opts: [
+                    "Di dalam tag <head> diapit oleh tag <style>",
+                    "Di baris paling bawah setelah tag </html>",
+                    "Di dalam tag <title>",
+                    "Di luar file HTML tanpa penanda"
+                ],
+                answer: 0,
+                explain: "Penulisan CSS internal disematkan di dalam tag <style> yang diletakkan pada bagian <head> sebelum dokumen body dibuka."
+            },
+            {
+                q: "9. Properti apa yang digunakan untuk mengubah warna teks tulisan di CSS?",
+                opts: ["text-color", "color", "font-color", "text-paint"],
+                answer: 1,
+                explain: "Properti 'color' mengatur warna teks font, sedangkan 'background-color' mengatur warna latar belakang."
+            },
+            {
+                q: "10. Mengapa pemahaman CSS Flexbox sangat esensial saat merancang aplikasi web modern kelas 12?",
+                opts: [
+                    "Karena mempercepat kecepatan loading WiFi sekolah",
+                    "Membuat tata letak antarmuka adaptif dan rapi saat dibuka di berbagai resolusi layar (laptop dan ponsel cerdas)",
+                    "Menghapus kebutuhan tag formulir HTML",
+                    "Memasukkan data otomatis ke server Supabase"
+                ],
+                answer: 1,
+                explain: "Flexbox mempermudah pembuatan tata letak responsif sehingga kartu data dan form tampak rapi baik di layar monitor maupun layar HP siswa."
+            }
+        ];
+
+        let answeredMap = {};
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tab-sandbox') {
+                runSandboxPreview();
+            } else if (tabId === 'tab-flexbox') {
+                updateFlexStage();
+            } else if (tabId === 'tab-quiz') {
+                if (!document.getElementById('quizContainer').hasChildNodes()) {
+                    renderQuiz();
+                }
+            }
+        }
+
+        // Flexbox Playground Live Logic
+        function updateFlexStage() {
+            const stage = document.getElementById('flexStageBox');
+            const direction = document.getElementById('flexDirectionSelect').value;
+            const justify = document.getElementById('justifyContentSelect').value;
+            const gap = document.getElementById('gapSelect').value;
+
+            stage.style.flexDirection = direction;
+            stage.style.justifyContent = justify;
+            stage.style.gap = gap;
+        }
+
+        function runSandboxPreview() {
+            const code = document.getElementById('liveCodeEditor').value;
+            const iframe = document.getElementById('livePreviewFrame');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `quiz-card-${qIdx}`;
+
+                const title = document.createElement('div');
+                title.className = 'quiz-question';
+                title.textContent = item.q;
+                card.appendChild(title);
+
+                const optsBox = document.createElement('div');
+                optsBox.className = 'quiz-options';
+
+                item.opts.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-opt';
+                    btn.id = `opt-${qIdx}-${optIdx}`;
+                    btn.textContent = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                    btn.addEventListener('click', () => handleQuizAnswer(qIdx, optIdx));
+                    optsBox.appendChild(btn);
+                });
+                card.appendChild(optsBox);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'quiz-feedback';
+                feedback.id = `feedback-${qIdx}`;
+                card.appendChild(feedback);
+
+                container.appendChild(card);
+            });
+
+            updateQuizProgressUI();
+        }
+
+        function handleQuizAnswer(qIdx, selectedIdx) {
+            if (answeredMap.hasOwnProperty(qIdx)) return;
+
+            const q = quizData[qIdx];
+            answeredMap[qIdx] = selectedIdx;
+
+            const optButtons = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const chosenBtn = document.getElementById(`opt-${qIdx}-${selectedIdx}`);
+            const correctBtn = document.getElementById(`opt-${qIdx}-${q.answer}`);
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+
+            if (selectedIdx === q.answer) {
+                chosenBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-correct';
+                feedbackEl.innerHTML = `<strong>✓ Benar!</strong> ${q.explain}`;
+            } else {
+                chosenBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-wrong';
+                feedbackEl.innerHTML = `<strong>✗ Belum Tepat!</strong> Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.answer)}. ${q.opts[q.answer]}</strong>.<br>${q.explain}`;
+            }
+
+            updateQuizProgressUI();
+
+            if (Object.keys(answeredMap).length === quizData.length) {
+                showQuizResult();
+            }
+        }
+
+        function updateQuizProgressUI() {
+            const answeredCount = Object.keys(answeredMap).length;
+            const percent = Math.round((answeredCount / quizData.length) * 100);
+            
+            document.getElementById('quizProgressText').innerText = `Dijawab: ${answeredCount} / ${quizData.length} Soal`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function showQuizResult() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (answeredMap[idx] === q.answer) correctCount++;
+            });
+
+            const score = correctCount * 10;
+            const scoreBox = document.getElementById('quizScoreBox');
+            const scoreTitle = document.getElementById('quizScoreTitle');
+            const scoreFeedback = document.getElementById('quizScoreFeedback');
+
+            scoreTitle.innerText = `Skor Akhir Kamu: ${score} / 100 (${correctCount} dari 10 Soal Benar)`;
+            if (score >= 80) {
+                scoreFeedback.innerText = "Luar biasa! Pemahamanmu seputar tata letak Flexbox dan Box Model sangat baik. Kamu siap melanjutkan ke tahap upload online di Modul 04!";
+            } else if (score >= 60) {
+                scoreFeedback.innerText = "Bagus! Kamu sudah memahami tata letak dasar. Coba pelajari ulang perbedaan margin dan padding agar makin mahir.";
+            } else {
+                scoreFeedback.innerText = "Tetap semangat! Mainkan kembali Flexbox Playground pada tab di atas, lalu coba ulangi kuis ini.";
+            }
+
+            scoreBox.style.display = 'block';
+            scoreBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            answeredMap = {};
+            document.getElementById('quizScoreBox').style.display = 'none';
+            renderQuiz();
+        }
+
+        function getProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function updateProgressUI() {
+            const prog = getProgress();
+            const badge = document.getElementById('moduleStatusBadge');
+            const badgeText = document.getElementById('statusBadgeText');
+            const btnMark = document.getElementById('btnMarkComplete');
+
+            if (prog[CURRENT_MODULE_ID] === 'completed') {
+                badge.className = 'complete-status-badge status-badge-done';
+                badgeText.innerText = 'Sudah Selesai ✓';
+                btnMark.innerHTML = '<span>✓ Modul Selesai (Buka Halaman Modul 04 →)</span>';
+            } else {
+                badge.className = 'complete-status-badge status-badge-active';
+                badgeText.innerText = 'Sedang Dipelajari';
+                btnMark.innerHTML = '<span>✅ Tandai Selesai & Buka Modul 04 🚀</span>';
+            }
+        }
+
+        function markModuleComplete() {
+            const prog = getProgress();
+            prog[CURRENT_MODULE_ID] = 'completed';
+
+            // Membuka modul 4 di dashboard jika masih terkunci
+            if (!prog[4] || prog[4] === 'locked') {
+                prog[4] = 'current';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+            updateProgressUI();
+            showToast("Modul 03 selesai! Modul 04 (GitHub Pages) kini terbuka di Dashboard 🎉", "🎉");
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        }
+
+        function showToast(text, icon = "✅") {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            runSandboxPreview();
+            updateFlexStage();
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
