@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 04: Git & Publikasi GitHub Pages | Informatika Kelas 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-alt: #1E293B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.25);
+            --accent-amber: #F59E0B;
+            --accent-purple: #A855F7;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 30%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1050px; margin: 0 auto; padding: 1.5rem 1.25rem 5rem 1.25rem; }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .nav-title { font-size: 0.9rem; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
+
+        .complete-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-badge-done { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge-active { background: rgba(56, 189, 248, 0.15); color: #7DD3FC; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .module-header {
+            background: linear-gradient(180deg, rgba(20, 35, 55, 0.6) 0%, rgba(19, 27, 46, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-meta { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .module-title { font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.8rem; line-height: 1.3; }
+        .module-desc { color: #CBD5E1; font-size: 0.95rem; max-width: 850px; }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tab-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #0B0F19;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 { font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-bottom: 1rem; }
+        .content-card h4 { font-size: 1.05rem; font-weight: 700; color: #38BDF8; margin: 1.5rem 0 0.6rem 0; }
+        .content-card p { color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.65; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+        .callout-green { background: rgba(16, 185, 129, 0.08); border-left-color: var(--accent-green); }
+        .callout-amber { background: rgba(245, 158, 11, 0.08); border-left-color: var(--accent-amber); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.2rem 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content-card { padding: 1.25rem; }
+        }
+
+        .sub-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .sub-card-title { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.5rem; }
+        .sub-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+        code.inline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #7DD3FC;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A7F3D0;
+        }
+
+        /* Git Flow Simulator */
+        .git-sim-container {
+            background: #0D1322;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .git-stages {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .git-stages { grid-template-columns: 1fr; }
+        }
+
+        .git-stage-box {
+            background: #162036;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .git-stage-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .git-file-pill {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38BDF8;
+            color: #38BDF8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            margin: 0.5rem auto;
+            display: inline-block;
+        }
+
+        .git-controls {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-git {
+            background: #1E293B;
+            border: 1px solid var(--border-color);
+            color: #F8FAFC;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-git:hover:not(:disabled) {
+            background: var(--primary);
+            color: #0B0F19;
+            border-color: var(--primary);
+        }
+
+        .btn-git:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .git-console {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #34D399;
+            min-height: 50px;
+        }
+
+        .step-list { list-style: none; counter-reset: step-counter; margin: 1rem 0; }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary);
+        }
+
+        /* Quiz UI */
+        .quiz-progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38BDF8, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .quiz-question { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.8rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quiz-opt {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #CBD5E1;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .quiz-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+        .quiz-opt.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10B981 !important;
+            color: #34D399 !important;
+            font-weight: 700;
+        }
+        .quiz-opt.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #EF4444 !important;
+            color: #F87171 !important;
+        }
+        .quiz-opt:disabled { cursor: not-allowed; opacity: 0.9; }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.12); color: #34D399; border-left: 4px solid #10B981; }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.12); color: #FCA5A5; border-left: 4px solid #EF4444; }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, rgba(20, 35, 60, 0.9), rgba(19, 27, 46, 0.95));
+            border: 1px solid #38BDF8;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .bottom-bar {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-action-primary:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #10B981;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="index.html" class="btn-back">← Kembali ke Roadmap</a>
+            <div class="nav-title">MODUL 04 • VERSION CONTROL & DEPLOY</div>
+            <div id="moduleStatusBadge" class="complete-status-badge status-badge-active">
+                <span>⚡</span>
+                <span id="statusBadgeText">Sedang Dipelajari</span>
+            </div>
+        </nav>
+
+        <header class="module-header">
+            <div class="module-meta">
+                <span class="tag-pill">Fase F (Kelas 12)</span>
+                <span class="tag-pill" style="background: rgba(16,185,129,0.15); color:#34D399; border-color: rgba(16,185,129,0.3);">⏱️ Pertemuan 7–8 (4 JP)</span>
+                <span class="tag-pill" style="background: rgba(168,85,247,0.15); color:#C084FC; border-color: rgba(168,85,247,0.3);">Proyek Web Supabase</span>
+            </div>
+            <h1 class="module-title">Git & Publikasi Online di GitHub Pages</h1>
+            <p class="module-desc">
+                Saatnya membagikan karyamu ke seluruh dunia! Pahami cara kerja Version Control System (Git), bedakan penyimpanan lokal dengan repositori cloud di GitHub, serta aktifkan hosting gratis GitHub Pages agar halaman webmu memiliki URL resmi yang bisa diakses dari HP siapa pun.
+            </p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-konsep', this)">🐙 1. Konsep Git & GitHub</button>
+            <button class="tab-btn" onclick="switchTab('tab-simulator', this)">🎮 2. Simulasi Alur Git</button>
+            <button class="tab-btn" onclick="switchTab('tab-deploy', this)">🚀 3. Langkah GitHub Pages</button>
+            <button class="tab-btn" onclick="switchTab('tab-troubleshoot', this)">🛠️ 4. Solusi Error 404</button>
+            <button class="tab-btn" onclick="switchTab('tab-praktik', this)">📋 5. Panduan Praktik Lab</button>
+            <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🎯 6. Kuis Pemahaman (10 Soal)</button>
+        </div>
+
+        <!-- Tab 1: Konsep -->
+        <section id="tab-konsep" class="tab-pane active">
+            <div class="content-card">
+                <h3>🐙 Git vs GitHub: Apa Bedanya?</h3>
+                <p>
+                    Banyak pemula mengira Git dan GitHub adalah hal yang sama. Padahal keduanya memiliki peran yang sangat berbeda namun saling melengkapi dalam rekayasa perangkat lunak:
+                </p>
+
+                <div class="grid-2">
+                    <div class="sub-card" style="border-top: 3px solid #F59E0B;">
+                        <div class="sub-card-title">🧰 1. Git (Mesin Perekam Jejak / Offline)</div>
+                        <p>Aplikasi pelacak revisi kode yang berjalan langsung di komputer/laptopmu. Mirip fitur <em>Save As / Checkpoint</em> dalam game, Git mencatat setiap perubahan kode sehingga kamu bisa kembali ke versi sebelumnya jika terjadi error.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #38BDF8;">
+                        <div class="sub-card-title">☁️ 2. GitHub (Rumah Cloud / Online)</div>
+                        <p>Layanan berbasis web tempat kita menyimpan berkas repositori Git di cloud. GitHub memungkinkan kolaborasi tim programmer di seluruh dunia dan menyediakan fitur hosting web statis gratis bernama <strong>GitHub Pages</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <strong>Format Alamat Web GitHub Pages Siswa:</strong><br>
+                    Website yang kamu hosting di GitHub Pages akan memiliki pola URL resmi:<br>
+                    <code class="inline">https://[username-kamu].github.io/[nama-repositori]/</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Simulator Alur Git -->
+        <section id="tab-simulator" class="tab-pane">
+            <div class="content-card">
+                <h3>🎮 Simulasi 3 Wilayah Kerja Git (Working, Staging, Repository)</h3>
+                <p>
+                    Git mengelola berkas melalui 3 tahapan. Klik tombol perintah secara berurutan untuk melihat bagaimana berkas berpindah status dari folder lokal hingga tersimpan di cloud GitHub:
+                </p>
+
+                <div class="git-sim-container">
+                    <div class="git-stages">
+                        <div class="git-stage-box" id="stageWorking">
+                            <div class="git-stage-title">1. Working Directory</div>
+                            <div id="fileWorking"><span class="git-file-pill">index.html (diubah)</span></div>
+                            <small style="color: var(--text-muted); font-size: 0.75rem;">Berkas aktif di komputermu</small>
+                        </div>
+                        <div class="git-stage-box" id="stageStaging">
+                            <div class="git-stage-title">2. Staging Area</div>
+                            <div id="fileStaging"><span style="color: var(--text-muted); font-size: 0.8rem;">(Kosong)</span></div>
+                            <small style="color: var(--text-muted); font-size: 0.75rem;">Area persiapan siap bungkus</small>
+                        </div>
+                        <div class="git-stage-box" id="stageRepo">
+                            <div class="git-stage-title">3. Local / Remote Repo</div>
+                            <div id="fileRepo"><span style="color: var(--text-muted); font-size: 0.8rem;">(Belum ada commit)</span></div>
+                            <small style="color: var(--text-muted); font-size: 0.75rem;">Jejak versi tersimpan permanen</small>
+                        </div>
+                    </div>
+
+                    <div class="git-controls">
+                        <button class="btn-git" id="btnGitAdd" onclick="runGitSim('add')">git add index.html</button>
+                        <button class="btn-git" id="btnGitCommit" onclick="runGitSim('commit')" disabled>git commit -m "update form"</button>
+                        <button class="btn-git" id="btnGitPush" onclick="runGitSim('push')" disabled>git push origin main</button>
+                        <button class="btn-git" onclick="resetGitSim()" style="background: rgba(239, 68, 68, 0.1); color: #F87171; border-color: rgba(239,68,68,0.3);">Reset 🔄</button>
+                    </div>
+
+                    <div class="git-console" id="gitConsoleLog">
+                        $ git status<br>Menunggu perintah git...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Langkah GitHub Pages -->
+        <section id="tab-deploy" class="tab-pane">
+            <div class="content-card">
+                <h3>🚀 Mengaktifkan GitHub Pages (Cara Praktis Web Upload)</h3>
+                <p>
+                    Bagi siswa yang belum memasang Git di komputer laboratorium, GitHub menyediakan fitur unggah berkas langsung melalui antarmuka web:
+                </p>
+
+                <ol class="step-list">
+                    <li>
+                        <strong>Buat Repositori Baru di GitHub:</strong>
+                        <p>Buka github.com, klik ikon <strong>"+" $\rightarrow$ New repository</strong>. Beri nama repositori (contoh: <code>aplikasi-web-12</code>) dan pastikan memilih opsi <strong>Public</strong>.</p>
+                    </li>
+                    <li>
+                        <strong>Unggah Berkas Proyek:</strong>
+                        <p>Klik link <em>"uploading an existing file"</em>. Seret file <code>index.html</code>, <code>modul-01.html</code>, dan file proyek lainnya ke kotak unggahan, lalu klik <strong>Commit changes</strong>.</p>
+                    </li>
+                    <li>
+                        <strong>Buka Menu Settings Repositori:</strong>
+                        <p>Pada tab menu atas repositori, klik <strong>Settings</strong> (ikon roda gigi), lalu pilih menu <strong>Pages</strong> di bilah navigasi sebelah kiri.</p>
+                    </li>
+                    <li>
+                        <strong>Pilih Sumber Branch:</strong>
+                        <p>Pada bagian <em>Build and deployment $\rightarrow$ Branch</em>, ubah pilihan dari <strong>None</strong> menjadi <strong>main</strong> (folder <code>/root</code>), lalu klik tombol <strong>Save</strong>.</p>
+                    </li>
+                    <li>
+                        <strong>Tunggu URL Publik Muncul:</strong>
+                        <p>Refresh halaman setelah 1–2 menit. Tautan websitemu akan muncul dengan warna hijau: <em>"Your site is live at https://..."</em>!</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tab 4: Troubleshooting 404 -->
+        <section id="tab-troubleshoot" class="tab-pane">
+            <div class="content-card">
+                <h3>🛠️ Mengatasi Masalah Umum: Error 404 Not Found</h3>
+                <p>
+                    Jika URL GitHub Pages dibuka tetapi memunculkan layar <em>"404 There isn't a GitHub Pages site here"</em>, biasanya disebabkan oleh 3 kekeliruan berikut:
+                </p>
+
+                <div class="grid-3">
+                    <div class="sub-card" style="border-left: 3px solid #EF4444;">
+                        <div class="sub-card-title">⚠️ 1. Huruf Besar pada Nama File</div>
+                        <p>GitHub Pages membedakan huruf besar dan kecil (*case sensitive*). File harus bernama <code>index.html</code> seluruhnya dengan huruf kecil, bukan <code>Index.html</code> atau <code>INDEX.HTML</code>.</p>
+                    </div>
+                    <div class="sub-card" style="border-left: 3px solid #F59E0B;">
+                        <div class="sub-card-title">📁 2. File Berada di Dalam Subfolder</div>
+                        <p>File <code>index.html</code> wajib berada di folder terluar (root). Jika kamu memasukkannya ke dalam folder baru (misal folder <code>proyek/index.html</code>), halaman utama tidak akan terbaca.</p>
+                    </div>
+                    <div class="sub-card" style="border-left: 3px solid #38BDF8;">
+                        <div class="sub-card-title">⏱️ 3. Proses Deployment Masih Antre</div>
+                        <p>Saat pertama kali disimpan, server GitHub butuh waktu 30 hingga 90 detik untuk merakit situsmu. Cek indikator lingkaran oranye/hijau di menu <em>Actions</em>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Praktik Lab -->
+        <section id="tab-praktik" class="tab-pane">
+            <div class="content-card">
+                <h3>📋 Tugas Praktik Pekan Ini: Rilis Web Pertama</h3>
+                <p>Lakukan tahapan berikut di laboratorium sekolah atau laptop pribadi:</p>
+
+                <div class="callout callout-green">
+                    <strong>Target Capaian:</strong> Menghasilkan URL aktif GitHub Pages yang memuat formulir profil dan kartu data yang telah kamu buat pada modul 1, 2, dan 3.
+                </div>
+
+                <ol class="step-list">
+                    <li>Daftar atau masuk ke akun GitHub masing-masing di <strong>github.com</strong>.</li>
+                    <li>Buat satu repositori publik khusus tugas informatika kelas 12.</li>
+                    <li>Unggah file <code>index.html</code> yang sudah dipercantik dengan CSS.</li>
+                    <li>Aktifkan fitur GitHub Pages melalui menu <em>Settings &rarr; Pages</em>.</li>
+                    <li>Salin URL website yang dihasilkan, buka melalui peramban di HP kamu, dan bagikan tautannya ke grup kelas untuk dinilai guru!</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tab 6: Kuis -->
+        <section id="tab-quiz" class="tab-pane">
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>🎯 Uji Pemahaman: Git & GitHub Pages (10 Soal)</h3>
+                    <div id="quizProgressText" style="font-size: 0.85rem; font-weight: 700; color: #38BDF8;">Dijawab: 0 / 10 Soal</div>
+                </div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressBar"></div>
+                </div>
+                <p style="margin-bottom: 1.5rem;">Pilih satu opsi jawaban yang paling tepat pada masing-masing pertanyaan berikut:</p>
+
+                <div id="quizContainer"></div>
+
+                <div class="quiz-score-box" id="quizScoreBox">
+                    <h4 style="font-size: 1.4rem; color: #38BDF8; margin-bottom: 0.4rem;" id="quizScoreTitle">Skor Kamu: 0 / 100</h4>
+                    <p id="quizScoreFeedback" style="color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1.2rem;"></p>
+                    <button class="btn-run" onclick="resetQuiz()">Ulangi Kuis 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-bar">
+            <div>
+                <h4 style="font-size: 1rem; color: #F8FAFC;">Sudah Menguasai Materi Modul 04?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Tandai modul ini tuntas agar Modul 05 (Logika Pemrograman JavaScript & DOM) terbuka di Dashboard.</p>
+            </div>
+            <div>
+                <button class="btn-action-primary" id="btnMarkComplete" onclick="markModuleComplete()">
+                    <span>✅ Tandai Selesai & Buka Modul 05 🚀</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast" id="toastMsg">
+        <span id="toastIcon">🎉</span>
+        <span id="toastText">Status berhasil disimpan!</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const CURRENT_MODULE_ID = 4;
+
+        const quizData = [
+            {
+                q: "1. Apa fungsi utama dari aplikasi Git dalam pengembangan perangkat lunak?",
+                opts: [
+                    "Mempercepat koneksi WiFi laptop",
+                    "Mencatat dan mengelola riwayat perubahan kode (Version Control System)",
+                    "Menghapus kode program secara otomatis",
+                    "Mendesain logo website"
+                ],
+                answer: 1,
+                explain: "Git bertindak sebagai Version Control System yang mencatat setiap revisi kode sumber program secara terstruktur."
+            },
+            {
+                q: "2. Pernyataan manakah yang paling tepat menjelaskan perbedaan Git dan GitHub?",
+                opts: [
+                    "Git adalah bahasa pemrograman, sedangkan GitHub adalah nama komputer",
+                    "Git adalah aplikasi pengontrol versi lokal, sedangkan GitHub adalah platform hosting cloud untuk menyimpan repositori Git",
+                    "Git hanya bisa dijalankan di ponsel, sedangkan GitHub hanya di laptop",
+                    "Git dan GitHub sama sekali tidak memiliki perbedaan"
+                ],
+                answer: 1,
+                explain: "Git berjalan secara lokal di komputer, sedangkan GitHub adalah platform berbasis cloud untuk menyimpan dan berbagi repositori Git."
+            },
+            {
+                q: "3. Perintah Git apa yang digunakan untuk memindahkan perubahan berkas dari Working Directory ke Staging Area?",
+                opts: ["git commit", "git add", "git push", "git init"],
+                answer: 1,
+                explain: "Perintah 'git add [nama_file]' memindahkan berkas yang telah diubah ke Staging Area agar siap dibungkus dalam commit."
+            },
+            {
+                q: "4. Perintah Git apa yang digunakan untuk menyimpan catatan jejak revisi secara permanen disertai pesan deskriptif?",
+                opts: ["git commit -m 'pesan'", "git save", "git upload", "git status"],
+                answer: 0,
+                explain: "'git commit -m' membungkus seluruh berkas di staging area menjadi satu titik riwayat (checkpoint) dengan pesan ringkas."
+            },
+            {
+                q: "5. Perintah apa yang digunakan untuk mengunggah riwayat commit dari repositori lokal di komputermu ke server GitHub?",
+                opts: ["git pull", "git push", "git clone", "git remote"],
+                answer: 1,
+                explain: "'git push' mengirimkan commit yang ada di repositori lokal ke repositori remote di cloud GitHub."
+            },
+            {
+                q: "6. Bagaimana format standar alamat website yang dipublikasikan secara otomatis menggunakan GitHub Pages?",
+                opts: [
+                    "https://[username].github.io/[nama-repositori]/",
+                    "https://www.[username].com",
+                    "https://github.com/[username]/pages/",
+                    "https://pages.google.com/[username]"
+                ],
+                answer: 0,
+                explain: "Format URL bawaan GitHub Pages selalu diawali dengan nama pengguna diikuti '.github.io' dan nama repositorinya."
+            },
+            {
+                q: "7. Mengapa repositori wajib diatur ke mode 'Public' jika ingin mengaktifkan GitHub Pages pada akun gratis biasa?",
+                opts: [
+                    "Agar kode bisa diedit oleh orang lain tanpa izin",
+                    "Ketentuan layanan GitHub Pages gratis mensyaratkan repositori dapat diakses publik oleh browser",
+                    "Agar tidak memakan ruang penyimpanan harddisk",
+                    "Supaya repositori tidak terhapus otomatis oleh sistem"
+                ],
+                answer: 1,
+                explain: "Pada akun GitHub gratis standar, fitur GitHub Pages hanya dapat diaktifkan pada repositori yang bersifat publik."
+            },
+            {
+                q: "8. Jika halaman GitHub Pages menampilkan pesan '404 Not Found', langkah perbaikan apa yang pertama kali harus diperiksa?",
+                opts: [
+                    "Memastikan file beranda utama bernama 'index.html' dengan seluruh huruf kecil dan berada di root folder",
+                    "Menginstal ulang sistem operasi komputer",
+                    "Mengganti akun Google",
+                    "Mematikan router sekolah"
+                ],
+                answer: 0,
+                explain: "Server GitHub Pages membutuhkan file bernama tepat 'index.html' (huruf kecil) di direktori utama (root) sebagai gerbang pembuka."
+            },
+            {
+                q: "9. Di menu pengaturan repositori sebelah manakah fitur GitHub Pages diaktifkan?",
+                opts: [
+                    "Settings -> Pages (pada bagian Build and deployment)",
+                    "Settings -> Security",
+                    "Pull requests",
+                    "Actions -> Marketplace"
+                ],
+                answer: 0,
+                explain: "GitHub Pages diaktifkan melalui tab menu Settings repositori, kemudian memilih menu Pages dan menentukan branch sumbernya."
+            },
+            {
+                q: "10. Apa manfaat utama mempublikasikan website proyek kelas 12 ke GitHub Pages sejak awal proses belajar?",
+                opts: [
+                    "Menghapus kebutuhan belajar bahasa pemrograman lain",
+                    "Hasil rekayasa aplikasi web dapat diuji langsung lintas perangkat (HP/laptop) dan dipamerkan sebagai portofolio digital nyata",
+                    "Membuat laptop menjadi kebal virus",
+                    "Mengubah database offline menjadi server fisik"
+                ],
+                answer: 1,
+                explain: "GitHub Pages memungkinkan siswa menguji hasil aplikasi web secara nyata di berbagai perangkat ponsel dan memiliki tautan portofolio online."
+            }
+        ];
+
+        let answeredMap = {};
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tab-quiz') {
+                if (!document.getElementById('quizContainer').hasChildNodes()) {
+                    renderQuiz();
+                }
+            }
+        }
+
+        // Git Simulator Logic
+        function runGitSim(action) {
+            const consoleLog = document.getElementById('gitConsoleLog');
+            const fileWorking = document.getElementById('fileWorking');
+            const fileStaging = document.getElementById('fileStaging');
+            const fileRepo = document.getElementById('fileRepo');
+
+            const btnAdd = document.getElementById('btnGitAdd');
+            const btnCommit = document.getElementById('btnGitCommit');
+            const btnPush = document.getElementById('btnGitPush');
+
+            if (action === 'add') {
+                fileWorking.innerHTML = '<span style="color: var(--text-muted); font-size: 0.8rem;">(Semua berkas telah ditandai)</span>';
+                fileStaging.innerHTML = '<span class="git-file-pill" style="border-color:#10B981; color:#34D399; background:rgba(16,185,129,0.15);">index.html (staged)</span>';
+                consoleLog.innerHTML = '$ git add index.html<br><span style="color:#38BDF8;">Berkas index.html siap dibungkus (Staging Area).</span>';
+                btnAdd.disabled = true;
+                btnCommit.disabled = false;
+            } else if (action === 'commit') {
+                fileStaging.innerHTML = '<span style="color: var(--text-muted); font-size: 0.8rem;">(Bersih)</span>';
+                fileRepo.innerHTML = '<span class="git-file-pill" style="border-color:#F59E0B; color:#FBBF24; background:rgba(245,158,11,0.15);">Commit #1 (Lokal)</span>';
+                consoleLog.innerHTML = '$ git commit -m "update form"<br><span style="color:#FBBF24;">[main 7f2a1b] update form - 1 file changed, 12 insertions(+)</span>';
+                btnCommit.disabled = true;
+                btnPush.disabled = false;
+            } else if (action === 'push') {
+                fileRepo.innerHTML = '<span class="git-file-pill" style="border-color:#38BDF8; color:#7DD3FC; background:rgba(56,189,248,0.2);">Tersinkron di GitHub Cloud ☁️</span>';
+                consoleLog.innerHTML = '$ git push origin main<br><span style="color:#34D399;">Writing objects: 100% (3/3), done. Berkas berhasil terkirim ke GitHub Pages! 🚀</span>';
+                btnPush.disabled = true;
+                showToast("Berkas berhasil dipublikasikan ke GitHub Cloud!", "🚀");
+            }
+        }
+
+        function resetGitSim() {
+            document.getElementById('fileWorking').innerHTML = '<span class="git-file-pill">index.html (diubah)</span>';
+            document.getElementById('fileStaging').innerHTML = '<span style="color: var(--text-muted); font-size: 0.8rem;">(Kosong)</span>';
+            document.getElementById('fileRepo').innerHTML = '<span style="color: var(--text-muted); font-size: 0.8rem;">(Belum ada commit)</span>';
+            
+            document.getElementById('btnGitAdd').disabled = false;
+            document.getElementById('btnGitCommit').disabled = true;
+            document.getElementById('btnGitPush').disabled = true;
+
+            document.getElementById('gitConsoleLog').innerHTML = '$ git status<br>Menunggu perintah git...';
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `quiz-card-${qIdx}`;
+
+                const title = document.createElement('div');
+                title.className = 'quiz-question';
+                title.textContent = item.q;
+                card.appendChild(title);
+
+                const optsBox = document.createElement('div');
+                optsBox.className = 'quiz-options';
+
+                item.opts.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-opt';
+                    btn.id = `opt-${qIdx}-${optIdx}`;
+                    btn.textContent = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                    btn.addEventListener('click', () => handleQuizAnswer(qIdx, optIdx));
+                    optsBox.appendChild(btn);
+                });
+                card.appendChild(optsBox);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'quiz-feedback';
+                feedback.id = `feedback-${qIdx}`;
+                card.appendChild(feedback);
+
+                container.appendChild(card);
+            });
+
+            updateQuizProgressUI();
+        }
+
+        function handleQuizAnswer(qIdx, selectedIdx) {
+            if (answeredMap.hasOwnProperty(qIdx)) return;
+
+            const q = quizData[qIdx];
+            answeredMap[qIdx] = selectedIdx;
+
+            const optButtons = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const chosenBtn = document.getElementById(`opt-${qIdx}-${selectedIdx}`);
+            const correctBtn = document.getElementById(`opt-${qIdx}-${q.answer}`);
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+
+            if (selectedIdx === q.answer) {
+                chosenBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-correct';
+                feedbackEl.innerHTML = `<strong>✓ Benar!</strong> ${q.explain}`;
+            } else {
+                chosenBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-wrong';
+                feedbackEl.innerHTML = `<strong>✗ Belum Tepat!</strong> Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.answer)}. ${q.opts[q.answer]}</strong>.<br>${q.explain}`;
+            }
+
+            updateQuizProgressUI();
+
+            if (Object.keys(answeredMap).length === quizData.length) {
+                showQuizResult();
+            }
+        }
+
+        function updateQuizProgressUI() {
+            const answeredCount = Object.keys(answeredMap).length;
+            const percent = Math.round((answeredCount / quizData.length) * 100);
+            
+            document.getElementById('quizProgressText').innerText = `Dijawab: ${answeredCount} / ${quizData.length} Soal`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function showQuizResult() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (answeredMap[idx] === q.answer) correctCount++;
+            });
+
+            const score = correctCount * 10;
+            const scoreBox = document.getElementById('quizScoreBox');
+            const scoreTitle = document.getElementById('quizScoreTitle');
+            const scoreFeedback = document.getElementById('quizScoreFeedback');
+
+            scoreTitle.innerText = `Skor Akhir Kamu: ${score} / 100 (${correctCount} dari 10 Soal Benar)`;
+            if (score >= 80) {
+                scoreFeedback.innerText = "Luar biasa! Pemahamanmu seputar Git dan alur deployment ke GitHub Pages sudah sangat kokoh. Siap melangkah ke logika JavaScript di Modul 05!";
+            } else if (score >= 60) {
+                scoreFeedback.innerText = "Bagus! Kamu sudah memahami alur dasar deployment. Coba pelajari kembali tab Simulator Alur Git agar makin mantap.";
+            } else {
+                scoreFeedback.innerText = "Tetap semangat! Pelajari kembali perbedaan Git dan GitHub pada materi di atas, lalu coba ulangi kuis ini.";
+            }
+
+            scoreBox.style.display = 'block';
+            scoreBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            answeredMap = {};
+            document.getElementById('quizScoreBox').style.display = 'none';
+            renderQuiz();
+        }
+
+        function getProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function updateProgressUI() {
+            const prog = getProgress();
+            const badge = document.getElementById('moduleStatusBadge');
+            const badgeText = document.getElementById('statusBadgeText');
+            const btnMark = document.getElementById('btnMarkComplete');
+
+            if (prog[CURRENT_MODULE_ID] === 'completed') {
+                badge.className = 'complete-status-badge status-badge-done';
+                badgeText.innerText = 'Sudah Selesai ✓';
+                btnMark.innerHTML = '<span>✓ Modul Selesai (Buka Halaman Modul 05 →)</span>';
+            } else {
+                badge.className = 'complete-status-badge status-badge-active';
+                badgeText.innerText = 'Sedang Dipelajari';
+                btnMark.innerHTML = '<span>✅ Tandai Selesai & Buka Modul 05 🚀</span>';
+            }
+        }
+
+        function markModuleComplete() {
+            const prog = getProgress();
+            prog[CURRENT_MODULE_ID] = 'completed';
+
+            // Membuka modul 5 di dashboard jika masih terkunci
+            if (!prog[5] || prog[5] === 'locked') {
+                prog[5] = 'current';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+            updateProgressUI();
+            showToast("Modul 04 selesai! Modul 05 (JavaScript DOM) kini terbuka di Dashboard 🎉", "🎉");
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        }
+
+        function showToast(text, icon = "✅") {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
