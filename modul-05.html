@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 05: Logika JavaScript & DOM | Informatika Kelas 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-alt: #1E293B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.25);
+            --accent-amber: #F59E0B;
+            --accent-purple: #A855F7;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 30%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1050px; margin: 0 auto; padding: 1.5rem 1.25rem 5rem 1.25rem; }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .nav-title { font-size: 0.9rem; font-weight: 700; color: #FBBF24; letter-spacing: 0.5px; }
+
+        .complete-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-badge-done { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge-active { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+        .module-header {
+            background: linear-gradient(180deg, rgba(35, 30, 20, 0.6) 0%, rgba(19, 27, 46, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-meta { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(245, 158, 11, 0.15);
+            color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .module-title { font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.8rem; line-height: 1.3; }
+        .module-desc { color: #CBD5E1; font-size: 0.95rem; max-width: 850px; }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tab-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background: #F59E0B;
+            color: #0B0F19;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 { font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-bottom: 1rem; }
+        .content-card h4 { font-size: 1.05rem; font-weight: 700; color: #38BDF8; margin: 1.5rem 0 0.6rem 0; }
+        .content-card p { color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.65; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+        .callout-amber { background: rgba(245, 158, 11, 0.08); border-left-color: var(--accent-amber); }
+        .callout-green { background: rgba(16, 185, 129, 0.08); border-left-color: var(--accent-green); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.2rem 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content-card { padding: 1.25rem; }
+        }
+
+        .sub-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .sub-card-title { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.5rem; }
+        .sub-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+        code.inline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #7DD3FC;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A7F3D0;
+        }
+
+        /* DOM Visual Simulator */
+        .dom-sim-box {
+            background: #0D1322;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .dom-target-card {
+            background: #1E293B;
+            border: 2px solid #38BDF8;
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .dom-action-buttons {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-dom {
+            background: #151D2F;
+            border: 1px solid var(--border-color);
+            color: #CBD5E1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-dom:hover {
+            background: #F59E0B;
+            color: #0B0F19;
+            font-weight: 700;
+        }
+
+        .sandbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        @media (max-width: 768px) { .sandbox-grid { grid-template-columns: 1fr; } }
+
+        .code-textarea {
+            width: 100%;
+            height: 290px;
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+        }
+        .code-textarea:focus { border-color: var(--primary); }
+        .preview-iframe {
+            width: 100%;
+            height: 290px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .step-list { list-style: none; counter-reset: step-counter; margin: 1rem 0; }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: rgba(245, 158, 11, 0.15);
+            color: #FBBF24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid #F59E0B;
+        }
+
+        /* Quiz UI */
+        .quiz-progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #F59E0B, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .quiz-question { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.8rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quiz-opt {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #CBD5E1;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .quiz-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+        .quiz-opt.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10B981 !important;
+            color: #34D399 !important;
+            font-weight: 700;
+        }
+        .quiz-opt.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #EF4444 !important;
+            color: #F87171 !important;
+        }
+        .quiz-opt:disabled { cursor: not-allowed; opacity: 0.9; }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.12); color: #34D399; border-left: 4px solid #10B981; }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.12); color: #FCA5A5; border-left: 4px solid #EF4444; }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, rgba(35, 30, 20, 0.9), rgba(19, 27, 46, 0.95));
+            border: 1px solid #F59E0B;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .bottom-bar {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-action-primary:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #10B981;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="index.html" class="btn-back">← Kembali ke Roadmap</a>
+            <div class="nav-title">MODUL 05 • LOGIKA PEMROGRAMAN</div>
+            <div id="moduleStatusBadge" class="complete-status-badge status-badge-active">
+                <span>⚡</span>
+                <span id="statusBadgeText">Sedang Dipelajari</span>
+            </div>
+        </nav>
+
+        <header class="module-header">
+            <div class="module-meta">
+                <span class="tag-pill">Fase F (Kelas 12)</span>
+                <span class="tag-pill" style="background: rgba(16,185,129,0.15); color:#34D399; border-color: rgba(16,185,129,0.3);">⏱️ Pertemuan 9–10 (4 JP)</span>
+                <span class="tag-pill" style="background: rgba(56,189,248,0.15); color:#7DD3FC; border-color: rgba(56,189,248,0.3);">Proyek Web Supabase</span>
+            </div>
+            <h1 class="module-title">Logika JavaScript & Manipulasi DOM Dasar</h1>
+            <p class="module-desc">
+                Saatnya memberi "otak" pada halaman webmu! Pelajari bagaimana JavaScript mengubah halaman HTML statis menjadi interaktif: memahami variabel (let & const), menyeleksi elemen melalui Document Object Model (DOM), mendengarkan klik tombol (Event Listener), hingga memanipulasi teks dan gaya secara langsung.
+            </p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-konsep', this)">⚡ 1. Kedudukan JavaScript</button>
+            <button class="tab-btn" onclick="switchTab('tab-variabel', this)">📦 2. Variabel & Tipe Data</button>
+            <button class="tab-btn" onclick="switchTab('tab-dom', this)">🌳 3. Apa Itu DOM?</button>
+            <button class="tab-btn" onclick="switchTab('tab-simulator', this)">🎮 4. Simulator DOM Interaktif</button>
+            <button class="tab-btn" onclick="switchTab('tab-sandbox', this)">🧪 5. Live Code Sandbox</button>
+            <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🎯 6. Kuis Pemahaman (10 Soal)</button>
+        </div>
+
+        <!-- Tab 1: Konsep -->
+        <section id="tab-konsep" class="tab-pane active">
+            <div class="content-card">
+                <h3>⚡ JavaScript: Otak dan Sistem Saraf Halaman Web</h3>
+                <p>
+                    Jika HTML adalah dinding bata rumah dan CSS adalah cat warna yang mempercantik, maka <strong>JavaScript</strong> adalah instalasi listrik, saklar otomatis, dan sensor pintar.
+                </p>
+
+                <div class="grid-3">
+                    <div class="sub-card" style="border-top: 3px solid #38BDF8;">
+                        <div class="sub-card-title">1. Tanpa JavaScript</div>
+                        <p>Halaman web bersifat pasif. Tombol yang diklik tidak melakukan apa-apa selain berpindah halaman atau me-refresh layar.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #F59E0B;">
+                        <div class="sub-card-title">2. Dengan JavaScript</div>
+                        <p>Halaman dapat bereaksi terhadap tindakan manusia: memvalidasi teks tanpa reload, menghitung total belanjaan, dan memunculkan pop-up interaktif.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #10B981;">
+                        <div class="sub-card-title">3. Hubungan ke Supabase</div>
+                        <p>JavaScript adalah jembatan yang bertugas mengambil data ketikan siswa lalu mengirimkannya ke database cloud Supabase.</p>
+                    </div>
+                </div>
+
+                <div class="callout callout-amber">
+                    <strong>Cara Menulis JavaScript di Dokumen HTML:</strong> Gunakan tag pembungkus <code>&lt;script&gt; ... &lt;/script&gt;</code> yang biasanya diletakkan tepat sebelum tag penutup <code>&lt;/body&gt;</code> agar seluruh tampilan web selesai dimuat terlebih dahulu.
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Variabel & Tipe Data -->
+        <section id="tab-variabel" class="tab-pane">
+            <div class="content-card">
+                <h3>📦 Variabel Modern: Wadah Penyimpan Data Sementara</h3>
+                <p>
+                    Variabel diibaratkan sebagai kotak kardus yang diberi label nama untuk menyimpan nilai di memori RAM komputer. Dalam JavaScript modern (ES6+), kita menggunakan <strong>const</strong> dan <strong>let</strong>:
+                </p>
+
+                <div class="grid-2">
+                    <div class="sub-card">
+                        <div class="sub-card-title">🔒 const (Konstanta - Nilai Tetap)</div>
+                        <p>Digunakan untuk data yang nilainya <strong>tidak boleh diubah</strong> setelah dibuat. Sangat disarankan untuk menyimpan elemen HTML atau URL API.<br>
+                        <code class="inline">const namaSekolah = "SMAN 1 Digital";</code></p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">🔄 let (Variabel Dinamis)</div>
+                        <p>Digunakan untuk data yang nilainya <strong>bisa berubah sewaktu-waktu</strong>, misalnya penghitung skor kuis atau status tombol.<br>
+                        <code class="inline">let jumlahHadir = 0; jumlahHadir = jumlahHadir + 1;</code></p>
+                    </div>
+                </div>
+
+                <h4>3 Tipe Data Paling Dasar:</h4>
+                <div class="grid-3">
+                    <div class="sub-card">
+                        <div class="sub-card-title">Teks (String)</div>
+                        <p>Diapit tanda petik.<br><code class="inline">"Budi"</code> atau <code class="inline">'Kelas 12'</code></p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">Angka (Number)</div>
+                        <p>Bisa bilangan bulat atau desimal tanpa tanda petik.<br><code class="inline">95</code> atau <code class="inline">3.75</code></p>
+                    </div>
+                    <div class="sub-card">
+                        <div class="sub-card-title">Logika (Boolean)</div>
+                        <p>Hanya bernilai benar atau salah.<br><code class="inline">true</code> atau <code class="inline">false</code></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: DOM -->
+        <section id="tab-dom" class="tab-pane">
+            <div class="content-card">
+                <h3>🌳 Document Object Model (DOM): Jembatan Penghubung</h3>
+                <p>
+                    Ketika file HTML dibuka di browser, browser mengubah tag-tag HTML tersebut menjadi struktur pohon objek yang disebut <strong>DOM (Document Object Model)</strong>. Melalui DOM, JavaScript bisa "melihat" dan "mengubah" elemen HTML mana pun.
+                </p>
+
+                <div class="table-wrap">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                                <th style="padding: 10px; color: #38BDF8;">Perintah JavaScript</th>
+                                <th style="padding: 10px; color: #38BDF8;">Fungsi Nyata</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px;"><code class="inline">document.getElementById('idElemen')</code></td>
+                                <td style="padding: 10px;">Menangkap elemen HTML berdasarkan atribut ID uniknya.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px;"><code class="inline">elemen.innerText = "Teks Baru"</code></td>
+                                <td style="padding: 10px;">Mengganti isi teks tulisan di layar secara seketika.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px;"><code class="inline">elemen.style.color = "red"</code></td>
+                                <td style="padding: 10px;">Mengubah gaya visual atau warna elemen langsung dari skrip.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;"><code class="inline">tombol.addEventListener('click', aksi)</code></td>
+                                <td style="padding: 10px;">Memasang sensor pendengar klik: jalankan fungsi ketika tombol ditekan.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Simulator DOM -->
+        <section id="tab-simulator" class="tab-pane">
+            <div class="content-card">
+                <h3>🎮 Simulator Interaktif Manipulasi DOM</h3>
+                <p>Klik tombol perintah di bawah untuk melihat bagaimana sebaris perintah JavaScript memanipulasi kartu di layar secara instan:</p>
+
+                <div class="dom-sim-box">
+                    <div class="dom-target-card" id="demoTargetCard">
+                        <h4 id="demoTargetTitle" style="color: #38BDF8; margin-top: 0;">Judul Asli (HTML Murni)</h4>
+                        <p id="demoTargetDesc" style="color: #CBD5E1; font-size: 0.9rem;">Paragraf ini belum diubah oleh skrip JavaScript apa pun.</p>
+                        <span id="demoTargetBadge" style="display: inline-block; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;">Status: Standar</span>
+                    </div>
+
+                    <div class="dom-action-buttons">
+                        <button class="btn-dom" onclick="simUbahTeks()">1. target.innerText = "Halo Kelas 12!"</button>
+                        <button class="btn-dom" onclick="simUbahWarna()">2. target.style.borderColor = "emerald"</button>
+                        <button class="btn-dom" onclick="simModeDark()">3. target.classList.toggle("mode-emas")</button>
+                        <button class="btn-dom" onclick="simResetDOM()" style="background: rgba(239,68,68,0.15); color: #F87171; border-color: rgba(239,68,68,0.3);">Reset 🔄</button>
+                    </div>
+
+                    <pre style="margin-top: 1rem;"><code id="simCodeLog">// Log Perintah Terakhir: Menunggu klik salah satu tombol di atas...</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Sandbox -->
+        <section id="tab-sandbox" class="tab-pane">
+            <div class="content-card">
+                <h3>🧪 Live Code Sandbox: Tombol Penghitung (Counter)</h3>
+                <p>Ujilah interaktivitas tombol di bawah. Setiap kali tombol diklik, variabel JavaScript bertambah 1 dan nilai pada layar diperbarui:</p>
+
+                <div class="sandbox-grid">
+                    <div>
+                        <textarea id="liveCodeEditor" class="code-textarea" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="font-family: sans-serif; text-align: center; padding: 20px; background: #0F172A; color: #F8FAFC;"&gt;
+  &lt;h2 id="judul"&gt;Aplikasi Counter Sederhana&lt;/h2&gt;
+  &lt;h1 id="angkaSkor" style="font-size: 48px; color: #38BDF8;"&gt;0&lt;/h1&gt;
+
+  &lt;button id="btnTambah" style="background: #38BDF8; color: #0F172A; border: none; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer;"&gt;
+    Tambah Angka +1
+  &lt;/button&gt;
+
+  &lt;script&gt;
+    let hitungan = 0;
+    const penampil = document.getElementById("angkaSkor");
+    const tombol = document.getElementById("btnTambah");
+
+    tombol.addEventListener("click", function() {
+      hitungan = hitungan + 1;
+      penampil.innerText = hitungan;
+      if (hitungan >= 5) {
+        penampil.style.color = "#10B981";
+      }
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                        <button class="btn-run" onclick="runSandboxPreview()">Jalankan Skrip ▶</button>
+                    </div>
+                    <div>
+                        <iframe id="livePreviewFrame" class="preview-iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 6: Kuis -->
+        <section id="tab-quiz" class="tab-pane">
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>🎯 Uji Pemahaman: JavaScript & DOM (10 Soal)</h3>
+                    <div id="quizProgressText" style="font-size: 0.85rem; font-weight: 700; color: #FBBF24;">Dijawab: 0 / 10 Soal</div>
+                </div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressBar"></div>
+                </div>
+                <p style="margin-bottom: 1.5rem;">Pilih satu opsi jawaban yang paling tepat pada masing-masing pertanyaan berikut:</p>
+
+                <div id="quizContainer"></div>
+
+                <div class="quiz-score-box" id="quizScoreBox">
+                    <h4 style="font-size: 1.4rem; color: #FBBF24; margin-bottom: 0.4rem;" id="quizScoreTitle">Skor Kamu: 0 / 100</h4>
+                    <p id="quizScoreFeedback" style="color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1.2rem;"></p>
+                    <button class="btn-run" onclick="resetQuiz()">Ulangi Kuis 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-bar">
+            <div>
+                <h4 style="font-size: 1rem; color: #F8FAFC;">Sudah Menguasai Materi Modul 05?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Tandai modul ini tuntas agar Modul 06 (Menangkap Input Form ke Array of Objects) terbuka di Dashboard.</p>
+            </div>
+            <div>
+                <button class="btn-action-primary" id="btnMarkComplete" onclick="markModuleComplete()">
+                    <span>✅ Tandai Selesai & Buka Modul 06 🚀</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast" id="toastMsg">
+        <span id="toastIcon">🎉</span>
+        <span id="toastText">Status berhasil disimpan!</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const CURRENT_MODULE_ID = 5;
+
+        const quizData = [
+            {
+                q: "1. Apa kepanjangan dari singkatan DOM dalam arsitektur peramban web?",
+                opts: [
+                    "Document Object Model",
+                    "Data Output Machine",
+                    "Digital Ordinance Module",
+                    "Desktop Operational Method"
+                ],
+                answer: 0,
+                explain: "DOM (Document Object Model) adalah representasi berstruktur pohon dari dokumen HTML yang memungkinkan bahasa pemrograman seperti JavaScript memanipulasi konten dan gayanya."
+            },
+            {
+                q: "2. Kata kunci deklarasi variabel mana yang digunakan jika nilai data TIDAK BOLEH diubah lagi sepanjang program berjalan?",
+                opts: ["let", "var", "const", "static"],
+                answer: 2,
+                explain: "Kata kunci 'const' (konstanta) mendeklarasikan variabel yang nilainya bersifat tetap dan akan memicu error jika dicoba ditimpa nilai baru."
+            },
+            {
+                q: "3. Perintah JavaScript yang paling umum digunakan untuk memilih satu elemen HTML berdasarkan atribut ID uniknya adalah...",
+                opts: [
+                    "document.selectTag('id')",
+                    "document.getElementById('id')",
+                    "window.findId('id')",
+                    "document.pickItem('id')"
+                ],
+                answer: 1,
+                explain: "'document.getElementById()' adalah metode resmi DOM untuk mengambil referensi satu elemen spesifik berdasarkan nilai ID-nya."
+            },
+            {
+                q: "4. Properti DOM apa yang digunakan untuk membaca atau mengganti tulisan teks biasa di dalam elemen HTML?",
+                opts: ["innerStyle", "innerText (atau textContent)", "valueText", "setHTML"],
+                answer: 1,
+                explain: "'innerText' atau 'textContent' digunakan untuk mengakses atau memperbarui teks yang ada di dalam elemen yang dituju."
+            },
+            {
+                q: "5. Manakah metode yang tepat untuk memasang fungsi pemicu aksi saat sebuah tombol diklik oleh pengguna?",
+                opts: [
+                    "tombol.addEventListener('click', fungsiAksi)",
+                    "tombol.waitClick(fungsiAksi)",
+                    "tombol.listen('press', fungsiAksi)",
+                    "tombol.trigger('touch', fungsiAksi)"
+                ],
+                answer: 0,
+                explain: "'addEventListener' dengan jenis event 'click' adalah metode standar untuk merespons interaksi klik pengguna."
+            },
+            {
+                q: "6. Di manakah letak terbaik untuk meletakkan tag <script> pada dokumen HTML konvensional?",
+                opts: [
+                    "Di bagian paling atas sebelum <!DOCTYPE html>",
+                    "Di dalam tag <head> tanpa atribut defer",
+                    "Tepat sebelum tag penutup </body>",
+                    "Di luar file HTML tanpa disematkan"
+                ],
+                answer: 2,
+                explain: "Meletakkan <script> sebelum penutup </body> memastikan seluruh elemen HTML telah selesai dimuat oleh browser sebelum skrip JavaScript dieksekusi."
+            },
+            {
+                q: "7. Tipe data apa yang hanya memiliki dua kemungkinan nilai: true (benar) atau false (salah)?",
+                opts: ["String", "Number", "Boolean", "Array"],
+                answer: 2,
+                explain: "Boolean adalah tipe data logika yang hanya dapat bernilai benar (true) atau salah (false)."
+            },
+            {
+                q: "8. Jika kamu mengetik let nilai = '100' (menggunakan tanda petik), maka tipe data variabel tersebut adalah...",
+                opts: ["Number (Angka)", "String (Teks)", "Boolean", "Object"],
+                answer: 1,
+                explain: "Nilai apa pun yang diapit oleh tanda petik tunggal atau ganda dianggap sebagai tipe data teks (String) oleh JavaScript."
+            },
+            {
+                q: "9. Fitur peramban (dapat dibuka dengan tombol F12) yang digunakan programmer untuk menguji perintah JavaScript dan melihat pesan galat adalah...",
+                opts: ["Network Speedometer", "Console Browser", "Cookie Cleaner", "HTML Formatter"],
+                answer: 1,
+                explain: "Developer Console (Console Browser) adalah panel uji coba interaktif dan pelacak error skrip JavaScript."
+            },
+            {
+                q: "10. Dalam proyek aplikasi web Supabase yang akan dibangun, mengapa pemahaman DOM sangat mendasar?",
+                opts: [
+                    "Untuk menghubungkan monitor ke CPU secara nirkabel",
+                    "Untuk mengambil isian teks yang diketikkan siswa pada form lalu menampilkannya kembali ke layar saat respon Supabase diterima",
+                    "Menggantikan fungsi kabel LAN sekolah",
+                    "Menghapus kebutuhan akun GitHub"
+                ],
+                answer: 1,
+                explain: "Manipulasi DOM memungkinkan skrip menangkap data inputan user dan memperbarui tampilan antarmuka saat data berhasil disimpan atau diambil dari database Supabase."
+            }
+        ];
+
+        let answeredMap = {};
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tab-sandbox') {
+                runSandboxPreview();
+            } else if (tabId === 'tab-quiz') {
+                if (!document.getElementById('quizContainer').hasChildNodes()) {
+                    renderQuiz();
+                }
+            }
+        }
+
+        // Live DOM Simulator Actions
+        function simUbahTeks() {
+            const judul = document.getElementById('demoTargetTitle');
+            const desc = document.getElementById('demoTargetDesc');
+            const log = document.getElementById('simCodeLog');
+
+            judul.innerText = "Halo Kelas 12! Teks Berhasil Diubah 🚀";
+            desc.innerText = "Perintah document.getElementById('...').innerText baru saja mengubah teks ini!";
+            log.innerText = `// Dieksekusi:\ndocument.getElementById('demoTargetTitle').innerText = 'Halo Kelas 12! Teks Berhasil Diubah 🚀';`;
+        }
+
+        function simUbahWarna() {
+            const card = document.getElementById('demoTargetCard');
+            const badge = document.getElementById('demoTargetBadge');
+            const log = document.getElementById('simCodeLog');
+
+            card.style.borderColor = "#10B981";
+            badge.style.background = "rgba(16, 185, 129, 0.25)";
+            badge.style.color = "#34D399";
+            badge.innerText = "Status: Border Emerald Diperbarui";
+            log.innerText = `// Dieksekusi:\ncard.style.borderColor = '#10B981';\nbadge.innerText = 'Status: Border Emerald Diperbarui';`;
+        }
+
+        function simModeDark() {
+            const card = document.getElementById('demoTargetCard');
+            const judul = document.getElementById('demoTargetTitle');
+            const log = document.getElementById('simCodeLog');
+
+            card.style.background = "linear-gradient(135deg, #2D1A04, #1E293B)";
+            card.style.borderColor = "#F59E0B";
+            judul.style.color = "#FBBF24";
+            log.innerText = `// Dieksekusi:\ncard.style.background = 'linear-gradient(135deg, #2D1A04, #1E293B)';\njudul.style.color = '#FBBF24';`;
+        }
+
+        function simResetDOM() {
+            const card = document.getElementById('demoTargetCard');
+            const judul = document.getElementById('demoTargetTitle');
+            const desc = document.getElementById('demoTargetDesc');
+            const badge = document.getElementById('demoTargetBadge');
+            const log = document.getElementById('simCodeLog');
+
+            card.style.background = "#1E293B";
+            card.style.borderColor = "#38BDF8";
+            judul.style.color = "#38BDF8";
+            judul.innerText = "Judul Asli (HTML Murni)";
+            desc.innerText = "Paragraf ini belum diubah oleh skrip JavaScript apa pun.";
+            badge.style.background = "rgba(255,255,255,0.1)";
+            badge.style.color = "#CBD5E1";
+            badge.innerText = "Status: Standar";
+            log.innerText = `// Reset DOM ke status bawaan berhasil.`;
+        }
+
+function runSandboxPreview() {
+    const editor = document.getElementById('liveCodeEditor');
+    const iframe = document.getElementById('livePreviewFrame');
+    
+    if (editor && iframe) {
+        // Menggunakan srcdoc menggantikan doc.write() yang rawan terblokir browser
+        iframe.srcdoc = editor.value;
+    }
+}
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `quiz-card-${qIdx}`;
+
+                const title = document.createElement('div');
+                title.className = 'quiz-question';
+                title.textContent = item.q;
+                card.appendChild(title);
+
+                const optsBox = document.createElement('div');
+                optsBox.className = 'quiz-options';
+
+                item.opts.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-opt';
+                    btn.id = `opt-${qIdx}-${optIdx}`;
+                    btn.textContent = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                    btn.addEventListener('click', () => handleQuizAnswer(qIdx, optIdx));
+                    optsBox.appendChild(btn);
+                });
+                card.appendChild(optsBox);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'quiz-feedback';
+                feedback.id = `feedback-${qIdx}`;
+                card.appendChild(feedback);
+
+                container.appendChild(card);
+            });
+
+            updateQuizProgressUI();
+        }
+
+        function handleQuizAnswer(qIdx, selectedIdx) {
+            if (answeredMap.hasOwnProperty(qIdx)) return;
+
+            const q = quizData[qIdx];
+            answeredMap[qIdx] = selectedIdx;
+
+            const optButtons = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const chosenBtn = document.getElementById(`opt-${qIdx}-${selectedIdx}`);
+            const correctBtn = document.getElementById(`opt-${qIdx}-${q.answer}`);
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+
+            if (selectedIdx === q.answer) {
+                chosenBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-correct';
+                feedbackEl.innerHTML = `<strong>✓ Benar!</strong> ${q.explain}`;
+            } else {
+                chosenBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-wrong';
+                feedbackEl.innerHTML = `<strong>✗ Belum Tepat!</strong> Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.answer)}. ${q.opts[q.answer]}</strong>.<br>${q.explain}`;
+            }
+
+            updateQuizProgressUI();
+
+            if (Object.keys(answeredMap).length === quizData.length) {
+                showQuizResult();
+            }
+        }
+
+        function updateQuizProgressUI() {
+            const answeredCount = Object.keys(answeredMap).length;
+            const percent = Math.round((answeredCount / quizData.length) * 100);
+            
+            document.getElementById('quizProgressText').innerText = `Dijawab: ${answeredCount} / ${quizData.length} Soal`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function showQuizResult() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (answeredMap[idx] === q.answer) correctCount++;
+            });
+
+            const score = correctCount * 10;
+            const scoreBox = document.getElementById('quizScoreBox');
+            const scoreTitle = document.getElementById('quizScoreTitle');
+            const scoreFeedback = document.getElementById('quizScoreFeedback');
+
+            scoreTitle.innerText = `Skor Akhir Kamu: ${score} / 100 (${correctCount} dari 10 Soal Benar)`;
+            if (score >= 80) {
+                scoreFeedback.innerText = "Luar biasa! Pemahaman logika JavaScript dan DOM dasar kamu sangat baik. Siap melangkah ke penanganan formulir dan koleksi array di Modul 06!";
+            } else if (score >= 60) {
+                scoreFeedback.innerText = "Bagus! Kamu sudah memahami konsep dasar. Buka kembali tab Apa Itu DOM dan Live Simulator agar makin mahir.";
+            } else {
+                scoreFeedback.innerText = "Tetap semangat! Pelajari kembali materi variabel dan fungsi getElementById pada tab di atas, lalu coba ulangi kuis ini.";
+            }
+
+            scoreBox.style.display = 'block';
+            scoreBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            answeredMap = {};
+            document.getElementById('quizScoreBox').style.display = 'none';
+            renderQuiz();
+        }
+
+        function getProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function updateProgressUI() {
+            const prog = getProgress();
+            const badge = document.getElementById('moduleStatusBadge');
+            const badgeText = document.getElementById('statusBadgeText');
+            const btnMark = document.getElementById('btnMarkComplete');
+
+            if (prog[CURRENT_MODULE_ID] === 'completed') {
+                badge.className = 'complete-status-badge status-badge-done';
+                badgeText.innerText = 'Sudah Selesai ✓';
+                btnMark.innerHTML = '<span>✓ Modul Selesai (Buka Halaman Modul 06 →)</span>';
+            } else {
+                badge.className = 'complete-status-badge status-badge-active';
+                badgeText.innerText = 'Sedang Dipelajari';
+                btnMark.innerHTML = '<span>✅ Tandai Selesai & Buka Modul 06 🚀</span>';
+            }
+        }
+
+        function markModuleComplete() {
+            const prog = getProgress();
+            prog[CURRENT_MODULE_ID] = 'completed';
+
+            // Membuka modul 6 di dashboard jika masih terkunci
+            if (!prog[6] || prog[6] === 'locked') {
+                prog[6] = 'current';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+            updateProgressUI();
+            showToast("Modul 05 selesai! Modul 06 (Form & Array Data) kini terbuka di Dashboard 🎉", "🎉");
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        }
+
+        function showToast(text, icon = "✅") {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            runSandboxPreview();
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
