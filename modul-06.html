@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 06: Event Handling Form & Nilai Dinamis | Informatika Kelas 12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131B2E;
+            --bg-card-alt: #1E293B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-green: #10B981;
+            --accent-green-glow: rgba(16, 185, 129, 0.25);
+            --accent-amber: #F59E0B;
+            --accent-purple: #A855F7;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 27, 46, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 30%, rgba(168, 85, 247, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1050px; margin: 0 auto; padding: 1.5rem 1.25rem 5rem 1.25rem; }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+
+        .nav-title { font-size: 0.9rem; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; }
+
+        .complete-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-badge-done { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-badge-active { background: rgba(56, 189, 248, 0.15); color: #7DD3FC; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+        .module-header {
+            background: linear-gradient(180deg, rgba(20, 35, 55, 0.6) 0%, rgba(19, 27, 46, 0.8) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-meta { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .module-title { font-size: 1.8rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.8rem; line-height: 1.3; }
+        .module-desc { color: #CBD5E1; font-size: 0.95rem; max-width: 850px; }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .tab-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #0B0F19;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 { font-size: 1.3rem; font-weight: 700; color: #F8FAFC; margin-bottom: 1rem; }
+        .content-card h4 { font-size: 1.05rem; font-weight: 700; color: #38BDF8; margin: 1.5rem 0 0.6rem 0; }
+        .content-card p { color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.65; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+            color: #E2E8F0;
+        }
+        .callout-amber { background: rgba(245, 158, 11, 0.08); border-left-color: var(--accent-amber); }
+        .callout-green { background: rgba(16, 185, 129, 0.08); border-left-color: var(--accent-green); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.2rem 0; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.2rem 0; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .content-card { padding: 1.25rem; }
+        }
+
+        .sub-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .sub-card-title { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.5rem; }
+        .sub-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0; }
+
+        code.inline {
+            background: rgba(255, 255, 255, 0.08);
+            color: #7DD3FC;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        pre {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #A7F3D0;
+        }
+
+        /* Interactive Form Simulator */
+        .interactive-stage {
+            background: #0D1322;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) { .sim-grid { grid-template-columns: 1fr; } }
+
+        .sim-form-box {
+            background: #151D2F;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.2rem;
+        }
+
+        .sim-input-group {
+            margin-bottom: 0.8rem;
+        }
+        .sim-input-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #38BDF8;
+            margin-bottom: 0.3rem;
+        }
+        .sim-input {
+            width: 100%;
+            background: #0B0F19;
+            border: 1px solid var(--border-color);
+            color: #F8FAFC;
+            padding: 0.55rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .sim-input:focus { border-color: var(--primary); }
+
+        .btn-sim-submit {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+
+        .sim-output-box {
+            background: #090E17;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .record-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Sandbox */
+        .sandbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        @media (max-width: 768px) { .sandbox-grid { grid-template-columns: 1fr; } }
+
+        .code-textarea {
+            width: 100%;
+            height: 310px;
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #E2E8F0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.83rem;
+            resize: none;
+            outline: none;
+        }
+        .code-textarea:focus { border-color: var(--primary); }
+        .preview-iframe {
+            width: 100%;
+            height: 310px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #38BDF8, #0284C7);
+            border: none;
+            color: #0B0F19;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .step-list { list-style: none; counter-reset: step-counter; margin: 1rem 0; }
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.92rem;
+        }
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid var(--primary);
+        }
+
+        /* Quiz UI */
+        .quiz-progress-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+            height: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38BDF8, #10B981);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .quiz-question { font-size: 0.95rem; font-weight: 700; color: #F8FAFC; margin-bottom: 0.8rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .quiz-opt {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #CBD5E1;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .quiz-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #FFFFFF; }
+        .quiz-opt.correct {
+            background: rgba(16, 185, 129, 0.25) !important;
+            border-color: #10B981 !important;
+            color: #34D399 !important;
+            font-weight: 700;
+        }
+        .quiz-opt.wrong {
+            background: rgba(239, 68, 68, 0.25) !important;
+            border-color: #EF4444 !important;
+            color: #F87171 !important;
+        }
+        .quiz-opt:disabled { cursor: not-allowed; opacity: 0.9; }
+
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .feedback-correct { background: rgba(16, 185, 129, 0.12); color: #34D399; border-left: 4px solid #10B981; }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.12); color: #FCA5A5; border-left: 4px solid #EF4444; }
+
+        .quiz-score-box {
+            background: linear-gradient(135deg, rgba(20, 35, 60, 0.9), rgba(19, 27, 46, 0.95));
+            border: 1px solid #38BDF8;
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .bottom-bar {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-action-primary:hover { transform: translateY(-2px); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1E293B;
+            border: 1px solid #10B981;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="top-nav">
+            <a href="index.html" class="btn-back">← Kembali ke Roadmap</a>
+            <div class="nav-title">MODUL 06 • LOGIKA PEMROGRAMAN LANJUT</div>
+            <div id="moduleStatusBadge" class="complete-status-badge status-badge-active">
+                <span>⚡</span>
+                <span id="statusBadgeText">Sedang Dipelajari</span>
+            </div>
+        </nav>
+
+        <header class="module-header">
+            <div class="module-meta">
+                <span class="tag-pill">Fase F (Kelas 12)</span>
+                <span class="tag-pill" style="background: rgba(16,185,129,0.15); color:#34D399; border-color: rgba(16,185,129,0.3);">⏱️ Pertemuan 11–12 (4 JP)</span>
+                <span class="tag-pill" style="background: rgba(168,85,247,0.15); color:#C084FC; border-color: rgba(168,85,247,0.3);">Proyek Web Supabase</span>
+            </div>
+            <h1 class="module-title">Event Handling Form Dinamis & Nilai Input</h1>
+            <p class="module-desc">
+                Hubungkan formulir HTML dengan logika JavaScript: pelajari rahasia <code>event.preventDefault()</code> untuk mencegah kedipan reload halaman, membaca teks dari properti <code>input.value</code>, mereset formulir secara otomatis, serta merender data ketikan pengguna langsung ke layar antarmuka web.
+            </p>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-konsep', this)">🛑 1. Rahasia preventDefault()</button>
+            <button class="tab-btn" onclick="switchTab('tab-value', this)">📥 2. Menangkap Nilai input.value</button>
+            <button class="tab-btn" onclick="switchTab('tab-simulator', this)">🎮 3. Simulator Buku Tamu Dinamis</button>
+            <button class="tab-btn" onclick="switchTab('tab-sandbox', this)">🧪 4. Live Code Sandbox</button>
+            <button class="tab-btn" onclick="switchTab('tab-praktik', this)">🚀 5. Praktik Proyek Sekolah</button>
+            <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🎯 6. Kuis Pemahaman (10 Soal)</button>
+        </div>
+
+        <!-- Tab 1: Konsep preventDefault -->
+        <section id="tab-konsep" class="tab-pane active">
+            <div class="content-card">
+                <h3>🛑 Mengapa Halaman Web Berkedip/Reload Saat Form Dikirim?</h3>
+                <p>
+                    Secara bawaan (*default*), elemen <code>&lt;form&gt;</code> di HTML dirancang untuk mengirim data ke berkas server lain dan memuat ulang seluruh halaman peramban. Namun, dalam aplikasi web interaktif modern (*Single Page Application*), kita <strong>tidak ingin</strong> halaman berkedip atau data sementara hilang.
+                </p>
+
+                <div class="grid-2">
+                    <div class="sub-card" style="border-top: 3px solid #EF4444;">
+                        <div class="sub-card-title">❌ Tanpa event.preventDefault()</div>
+                        <p>Ketika tombol "Submit" ditekan, browser langsung melakukan refresh halaman. Variabel JavaScript terhapus dari memori, dan tampilan kembali kosong seperti semula.</p>
+                    </div>
+                    <div class="sub-card" style="border-top: 3px solid #10B981;">
+                        <div class="sub-card-title">✅ Dengan event.preventDefault()</div>
+                        <p>Perilaku reload bawaan dibatalkan. JavaScript mengambil kendali penuh: membaca nilai input, menampilkan pesan notifikasi, dan bersiap mengirim data ke Supabase tanpa gangguan.</p>
+                    </div>
+                </div>
+
+                <div class="callout callout-amber">
+                    <strong>Pola Standar Event Listener pada Formulir:</strong>
+                    <pre style="margin: 0.5rem 0;"><code>const form = document.getElementById("formAspirasi");
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault(); // Mengunci agar browser tidak reload!
+  console.log("Formulir berhasil dikendalikan JavaScript.");
+});</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: input.value -->
+        <section id="tab-value" class="tab-pane">
+            <div class="content-card">
+                <h3>📥 Menangkap Teks yang Diketik: Properti input.value</h3>
+                <p>
+                    Jika elemen paragraf atau judul dibaca menggunakan <code class="inline">innerText</code>, maka elemen formulir seperti <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, dan <code>&lt;select&gt;</code> dibaca menggunakan properti khusus: <strong><code>.value</code></strong>.
+                </p>
+
+                <div class="table-wrap">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                                <th style="padding: 10px; color: #38BDF8;">Elemen HTML</th>
+                                <th style="padding: 10px; color: #38BDF8;">Cara Membaca Nilai di JavaScript</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px;"><code class="inline">&lt;input type="text" id="nama"&gt;</code></td>
+                                <td style="padding: 10px;"><code class="inline">const namaSiswa = document.getElementById("nama").value;</code></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px;"><code class="inline">&lt;select id="kategori"&gt;</code></td>
+                                <td style="padding: 10px;"><code class="inline">const kategoriPilihan = document.getElementById("kategori").value;</code></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px;"><code class="inline">&lt;textarea id="catatan"&gt;</code></td>
+                                <td style="padding: 10px;"><code class="inline">const isiPesan = document.getElementById("catatan").value;</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px;">Mengosongkan form setelah kirim</td>
+                                <td style="padding: 10px;"><code class="inline">form.reset();</code> atau <code class="inline">input.value = "";</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Simulator Interaktif -->
+        <section id="tab-simulator" class="tab-pane">
+            <div class="content-card">
+                <h3>🎮 Simulator Buku Tamu Digital Dinamis</h3>
+                <p>Cobalah ketik nama dan catatan aspirasimu di formulir sebelah kiri, lalu tekan tombol kirim. Perhatikan bagaimana JavaScript menangkap nilainya dan merendernya ke papan sebelah kanan tanpa reload halaman!</p>
+
+                <div class="interactive-stage">
+                    <div class="sim-grid">
+                        <div class="sim-form-box">
+                            <h4 style="color: #38BDF8; margin-top: 0; font-size: 1rem;">📝 Form Catatan Siswa</h4>
+                            <form id="simDemoForm" onsubmit="handleSimSubmit(event)">
+                                <div class="sim-input-group">
+                                    <label for="simNama">Nama Lengkap:</label>
+                                    <input type="text" id="simNama" class="sim-input" placeholder="Misal: Siti Rahma" required>
+                                </div>
+                                <div class="sim-input-group">
+                                    <label for="simKelas">Pilihan Kelas:</label>
+                                    <select id="simKelas" class="sim-input">
+                                        <option value="12 MIPA 1">12 MIPA 1</option>
+                                        <option value="12 MIPA 2">12 MIPA 2</option>
+                                        <option value="12 IPS 1">12 IPS 1</option>
+                                    </select>
+                                </div>
+                                <div class="sim-input-group">
+                                    <label for="simPesan">Catatan Aspirasi:</label>
+                                    <textarea id="simPesan" class="sim-input" rows="2" placeholder="Tuliskan saran sekolah..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-sim-submit">Simpan Catatan ke Layar 🚀</button>
+                            </form>
+                        </div>
+
+                        <div class="sim-output-box">
+                            <h4 style="color: #10B981; margin-top: 0; font-size: 1rem;">📋 Papan Pengumuman Interaktif</h4>
+                            <div id="simRecordContainer" style="overflow-y: auto; max-height: 220px;">
+                                <div class="record-card">
+                                    <div>
+                                        <strong style="color: #38BDF8;">Budi Santoso</strong> (12 MIPA 1)<br>
+                                        <span style="color: #CBD5E1; font-size: 0.8rem;">Mohon AC lab komputer diservis.</span>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: #10B981;">✓ Contoh</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Sandbox -->
+        <section id="tab-sandbox" class="tab-pane">
+            <div class="content-card">
+                <h3>🧪 Live Code Sandbox: Penggabungan Form + DOM</h3>
+                <p>Gunakan editor berikut untuk menguji pemahamanmu. Edit teks, tambahkan kolom baru, lalu klik <strong>"Jalankan Kode ▶"</strong> untuk melihat hasilnya secara instan:</p>
+
+                <div class="sandbox-grid">
+                    <div>
+                        <textarea id="liveCodeEditor" class="code-textarea" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="font-family: sans-serif; padding: 15px; background: #0F172A; color: #F8FAFC;"&gt;
+  &lt;h3 style="color: #38BDF8;"&gt;Sistem Sapa Siswa Dinamis&lt;/h3&gt;
+  &lt;form id="formSapa"&gt;
+    &lt;input type="text" id="inputNama" placeholder="Ketik nama lengkap..." required style="padding: 8px; border-radius: 6px; width: 70%;"&gt;
+    &lt;button type="submit" style="padding: 8px 12px; background: #38BDF8; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;"&gt;Sapa&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;hr style="margin: 15px 0; border: 0.5px solid #334155;"&gt;
+  &lt;div id="wadahSapaan" style="font-size: 16px; color: #34D399;"&gt;Menunggu nama diketikkan...&lt;/div&gt;
+
+  &lt;script&gt;
+    const form = document.getElementById("formSapa");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault(); // Cegah refresh
+      const nama = document.getElementById("inputNama").value;
+      const wadah = document.getElementById("wadahSapaan");
+      wadah.innerHTML = "&lt;strong&gt;Halo " + nama + "!&lt;/strong&gt; Datamu berhasil ditangkap JavaScript.";
+      form.reset(); // Kosongkan input
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                        <button class="btn-run" onclick="runSandboxPreview()">Jalankan Kode ▶</button>
+                    </div>
+                    <div>
+                        <iframe id="livePreviewFrame" class="preview-iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Praktik Lab -->
+        <section id="tab-praktik" class="tab-pane">
+            <div class="content-card">
+                <h3>🚀 Panduan Praktik Nyata: Menghubungkan Form Modul 02</h3>
+                <p>Saatnya menerapkan event listener ke proyek utama aplikasimu yang telah dihosting di GitHub Pages:</p>
+
+                <ol class="step-list">
+                    <li>
+                        <strong>Buka Berkas index.html Proyekmu di VS Code / Notepad:</strong>
+                        <p>Pastikan formulir yang telah kamu buat pada Modul 02 memiliki atribut <code>id="formAspirasi"</code>.</p>
+                    </li>
+                    <li>
+                        <strong>Tambahkan Wadah List di Bawah Formulir:</strong>
+                        <p>Sisipkan tag <code>&lt;div id="daftarAspirasi"&gt;&lt;/div&gt;</code> sebagai tempat menampilkan catatan yang baru diisi.</p>
+                    </li>
+                    <li>
+                        <strong>Tuliskan Blok Skrip di Sebelum &lt;/body&gt;:</strong>
+                        <p>Pasang <code>addEventListener("submit", function(e) { e.preventDefault(); ... })</code> untuk menangkap nilai <code>nama.value</code> dan <code>pesan.value</code>.</p>
+                    </li>
+                    <li>
+                        <strong>Render Teks Menggunakan innerHTML:</strong>
+                        <p>Gunakan format <em>template literals</em> dengan tanda *backtick* (<code>`...`</code>) untuk menyisipkan kartu baru ke dalam wadah list.</p>
+                    </li>
+                    <li>
+                        <strong>Uji Coba Langsung di Browser:</strong>
+                        <p>Tekan <em>Ctrl + S</em>, buka di Chrome, ketikkan data contoh, lalu klik submit. Pastikan halaman tidak reload dan catatan barumu langsung muncul!</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Tab 6: Kuis -->
+        <section id="tab-quiz" class="tab-pane">
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>🎯 Uji Pemahaman: Event Form & Tangkapan Data (10 Soal)</h3>
+                    <div id="quizProgressText" style="font-size: 0.85rem; font-weight: 700; color: #38BDF8;">Dijawab: 0 / 10 Soal</div>
+                </div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressBar"></div>
+                </div>
+                <p style="margin-bottom: 1.5rem;">Pilih satu opsi jawaban yang paling tepat pada masing-masing pertanyaan berikut:</p>
+
+                <div id="quizContainer"></div>
+
+                <div class="quiz-score-box" id="quizScoreBox">
+                    <h4 style="font-size: 1.4rem; color: #38BDF8; margin-bottom: 0.4rem;" id="quizScoreTitle">Skor Kamu: 0 / 100</h4>
+                    <p id="quizScoreFeedback" style="color: #CBD5E1; font-size: 0.95rem; margin-bottom: 1.2rem;"></p>
+                    <button class="btn-run" onclick="resetQuiz()">Ulangi Kuis 🔄</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bottom-bar">
+            <div>
+                <h4 style="font-size: 1rem; color: #F8FAFC;">Sudah Menguasai Materi Modul 06?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Tandai modul ini tuntas agar Modul 07 (Koleksi Data Terstruktur / Array of Objects & JSON) terbuka di Dashboard.</p>
+            </div>
+            <div>
+                <button class="btn-action-primary" id="btnMarkComplete" onclick="markModuleComplete()">
+                    <span>✅ Tandai Selesai & Buka Modul 07 🚀</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast" id="toastMsg">
+        <span id="toastIcon">🎉</span>
+        <span id="toastText">Status berhasil disimpan!</span>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'informatika_12_full_16modul_roadmap';
+        const CURRENT_MODULE_ID = 6;
+
+        const quizData = [
+            {
+                q: "1. Apa akibat yang terjadi pada halaman web jika formulir dikirim tanpa menggunakan 'event.preventDefault()'?",
+                opts: [
+                    "Browser otomatis me-refresh seluruh halaman sehingga data variabel sementara di JavaScript terhapus",
+                    "Komputer langsung mati mendadak",
+                    "Warna teks berubah menjadi merah permanen",
+                    "Data otomatis terenkripsi oleh server"
+                ],
+                answer: 0,
+                explain: "Perilaku bawaan peramban saat form disubmit adalah mengirim permintaan dan memuat ulang (reload) halaman, sehingga event.preventDefault() diperlukan untuk membatalkannya."
+            },
+            {
+                q: "2. Jenis event apakah yang tepat dipasang pada elemen <form> untuk mendeteksi saat tombol submit ditekan?",
+                opts: ["'hover'", "'submit'", "'change'", "'scroll'"],
+                answer: 1,
+                explain: "Event 'submit' dipicu pada elemen formulir ketika pengguna menekan tombol bertipe submit atau menekan enter di kotak input."
+            },
+            {
+                q: "3. Properti DOM apa yang digunakan untuk membaca teks yang diketikkan pengguna di dalam elemen <input>?",
+                opts: [".innerText", ".textContent", ".value", ".innerHTML"],
+                answer: 2,
+                explain: "Properti '.value' digunakan secara spesifik untuk membaca maupun mengubah nilai data pada elemen masukan formulir."
+            },
+            {
+                q: "4. Bagaimana cara mengosongkan kembali seluruh kotak isian di dalam sebuah formulir setelah data berhasil dikirim?",
+                opts: ["form.delete()", "form.reset()", "form.clearAll()", "form.destroy()"],
+                answer: 1,
+                explain: "Metode form.reset() mengembalikan semua elemen di dalam form ke nilai awalnya (mengosongkan isian)."
+            },
+            {
+                q: "5. Mengapa parameter 'event' (atau 'e') harus ditulis pada fungsi penangan form: form.addEventListener('submit', function(e) {...})?",
+                opts: [
+                    "Agar ukuran memori browser mengecil",
+                    "Untuk menyediakan objek event yang memuat metode bawaan seperti e.preventDefault()",
+                    "Sebagai pengganti tag HTML",
+                    "Karena aturan wajib dari Google Chrome saja"
+                ],
+                answer: 1,
+                explain: "Objek event (e) merepresentasikan peristiwa yang sedang terjadi dan membawa metode penting untuk mengontrol alur event browser."
+            },
+            {
+                q: "6. Jika sebuah elemen input memiliki <input id='email' value='test@gmail.com'>, apa hasil dari document.getElementById('email').value?",
+                opts: ["'test@gmail.com'", "undefined", "null", "false"],
+                answer: 0,
+                explain: "Properti .value membaca teks aktual yang ada di dalam kotak input tersebut, yaitu 'test@gmail.com'."
+            },
+            {
+                q: "7. Fitur JavaScript modern apa yang menggunakan tanda petik terbalik (`...`) untuk menyisipkan variabel ke teks HTML (contoh: `<p>${nama}</p>`)?",
+                opts: ["Array Slice", "Template Literals", "JSON Parser", "CSS Grid"],
+                answer: 1,
+                explain: "Template Literals dengan sintaks `${variabel}` memungkinkan penyisipan data dinamis ke dalam potongan kode HTML secara ringkas dan rapi."
+            },
+            {
+                q: "8. Kapan waktu yang paling tepat untuk membaca properti input.value milik pengguna?",
+                opts: [
+                    "Saat halaman baru pertama kali dimuat",
+                    "Tepat di dalam fungsi penangan saat event submit terjadi",
+                    "Sebelum komputer dinyalakan",
+                    "Di dalam tag <head> dokumen"
+                ],
+                answer: 1,
+                explain: "Nilai input harus dibaca saat event submit berlangsung agar memperoleh data teks terbaru yang baru saja diketikkan oleh pengguna."
+            },
+            {
+                q: "9. Jika pengguna menekan submit tanpa mengetik apapun padahal input memiliki atribut 'required', apa reaksi peramban?",
+                opts: [
+                    "Browser otomatis menahan submit dan memunculkan balon peringatan agar kolom diisi",
+                    "Browser mengalami error fatal",
+                    "JavaScript otomatis mengisi nama acak",
+                    "Halaman langsung ditutup paksa"
+                ],
+                answer: 0,
+                explain: "Atribut required mengaktifkan validasi bawaan browser sebelum event submit dilanjutkan ke kode JavaScript."
+            },
+            {
+                q: "10. Dalam siklus pembuatan aplikasi web bersama Supabase, penguasaan materi Modul 06 ini penting karena...",
+                opts: [
+                    "Menghilangkan kebutuhan basis data cloud",
+                    "Merupakan tahap penangkap data pengguna sebelum data tersebut dipaketkan dan dikirim ke server Supabase",
+                    "Mengubah jaringan WiFi menjadi satelit",
+                    "Menggantikan fungsi seluruh tombol keyboard"
+                ],
+                answer: 1,
+                explain: "Sebelum data dapat dikirim dan disimpan ke cloud database Supabase, JavaScript harus mampu menangkap dan memvalidasi nilai input dari formulir secara dinamis."
+            }
+        ];
+
+        let answeredMap = {};
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabId === 'tab-sandbox') {
+                runSandboxPreview();
+            } else if (tabId === 'tab-quiz') {
+                if (!document.getElementById('quizContainer').hasChildNodes()) {
+                    renderQuiz();
+                }
+            }
+        }
+
+        // Live Sandbox Logic (Menggunakan srcdoc agar aman)
+        function runSandboxPreview() {
+            const editor = document.getElementById('liveCodeEditor');
+            const iframe = document.getElementById('livePreviewFrame');
+            if (editor && iframe) {
+                iframe.srcdoc = editor.value;
+            }
+        }
+
+        // Simulator Form Action
+        function handleSimSubmit(event) {
+            event.preventDefault();
+            const nama = document.getElementById('simNama').value;
+            const kelas = document.getElementById('simKelas').value;
+            const pesan = document.getElementById('simPesan').value;
+            const container = document.getElementById('simRecordContainer');
+
+            const newCard = document.createElement('div');
+            newCard.className = 'record-card';
+            newCard.innerHTML = `
+                <div>
+                    <strong style="color: #38BDF8;">${nama}</strong> (${kelas})<br>
+                    <span style="color: #CBD5E1; font-size: 0.8rem;">${pesan}</span>
+                </div>
+                <span style="font-size: 0.75rem; color: #10B981;">Baru Ditangkap ✨</span>
+            `;
+
+            container.prepend(newCard);
+            document.getElementById('simDemoForm').reset();
+            showToast("Data formulir berhasil ditangkap JavaScript!", "📥");
+        }
+
+        // Quiz Render & Execution
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.id = `quiz-card-${qIdx}`;
+
+                const title = document.createElement('div');
+                title.className = 'quiz-question';
+                title.textContent = item.q;
+                card.appendChild(title);
+
+                const optsBox = document.createElement('div');
+                optsBox.className = 'quiz-options';
+
+                item.opts.forEach((optText, optIdx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-opt';
+                    btn.id = `opt-${qIdx}-${optIdx}`;
+                    btn.textContent = `${String.fromCharCode(65 + optIdx)}. ${optText}`;
+                    btn.addEventListener('click', () => handleQuizAnswer(qIdx, optIdx));
+                    optsBox.appendChild(btn);
+                });
+                card.appendChild(optsBox);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'quiz-feedback';
+                feedback.id = `feedback-${qIdx}`;
+                card.appendChild(feedback);
+
+                container.appendChild(card);
+            });
+
+            updateQuizProgressUI();
+        }
+
+        function handleQuizAnswer(qIdx, selectedIdx) {
+            if (answeredMap.hasOwnProperty(qIdx)) return;
+
+            const q = quizData[qIdx];
+            answeredMap[qIdx] = selectedIdx;
+
+            const optButtons = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+            optButtons.forEach(btn => btn.disabled = true);
+
+            const chosenBtn = document.getElementById(`opt-${qIdx}-${selectedIdx}`);
+            const correctBtn = document.getElementById(`opt-${qIdx}-${q.answer}`);
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+
+            if (selectedIdx === q.answer) {
+                chosenBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-correct';
+                feedbackEl.innerHTML = `<strong>✓ Benar!</strong> ${q.explain}`;
+            } else {
+                chosenBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                feedbackEl.className = 'quiz-feedback show feedback-wrong';
+                feedbackEl.innerHTML = `<strong>✗ Belum Tepat!</strong> Jawaban yang benar adalah <strong>${String.fromCharCode(65 + q.answer)}. ${q.opts[q.answer]}</strong>.<br>${q.explain}`;
+            }
+
+            updateQuizProgressUI();
+
+            if (Object.keys(answeredMap).length === quizData.length) {
+                showQuizResult();
+            }
+        }
+
+        function updateQuizProgressUI() {
+            const answeredCount = Object.keys(answeredMap).length;
+            const percent = Math.round((answeredCount / quizData.length) * 100);
+            
+            document.getElementById('quizProgressText').innerText = `Dijawab: ${answeredCount} / ${quizData.length} Soal`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function showQuizResult() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (answeredMap[idx] === q.answer) correctCount++;
+            });
+
+            const score = correctCount * 10;
+            const scoreBox = document.getElementById('quizScoreBox');
+            const scoreTitle = document.getElementById('quizScoreTitle');
+            const scoreFeedback = document.getElementById('quizScoreFeedback');
+
+            scoreTitle.innerText = `Skor Akhir Kamu: ${score} / 100 (${correctCount} dari 10 Soal Benar)`;
+            if (score >= 80) {
+                scoreFeedback.innerText = "Luar biasa! Pemahamanmu mengenai penanganan formulir dinamis sangat matang. Siap lanjut ke Modul 07 (Array of Objects & JSON)!";
+            } else if (score >= 60) {
+                scoreFeedback.innerText = "Bagus! Kamu sudah memahami alur dasar form. Pelajari kembali fungsi preventDefault() agar semakin mahir.";
+            } else {
+                scoreFeedback.innerText = "Tetap semangat! Buka kembali tab 1 dan tab 2, lalu coba ulangi kuis ini untuk memperdalam pemahaman.";
+            }
+
+            scoreBox.style.display = 'block';
+            scoreBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            answeredMap = {};
+            document.getElementById('quizScoreBox').style.display = 'none';
+            renderQuiz();
+        }
+
+        function getProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function updateProgressUI() {
+            const prog = getProgress();
+            const badge = document.getElementById('moduleStatusBadge');
+            const badgeText = document.getElementById('statusBadgeText');
+            const btnMark = document.getElementById('btnMarkComplete');
+
+            if (prog[CURRENT_MODULE_ID] === 'completed') {
+                badge.className = 'complete-status-badge status-badge-done';
+                badgeText.innerText = 'Sudah Selesai ✓';
+                btnMark.innerHTML = '<span>✓ Modul Selesai (Buka Halaman Modul 07 →)</span>';
+            } else {
+                badge.className = 'complete-status-badge status-badge-active';
+                badgeText.innerText = 'Sedang Dipelajari';
+                btnMark.innerHTML = '<span>✅ Tandai Selesai & Buka Modul 07 🚀</span>';
+            }
+        }
+
+        function markModuleComplete() {
+            const prog = getProgress();
+            prog[CURRENT_MODULE_ID] = 'completed';
+
+            // Membuka modul 7 di dashboard jika masih terkunci
+            if (!prog[7] || prog[7] === 'locked') {
+                prog[7] = 'current';
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(prog));
+            updateProgressUI();
+            showToast("Modul 06 tuntas! Modul 07 kini terbuka di Dashboard 🎉", "🎉");
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1200);
+        }
+
+        function showToast(text, icon = "✅") {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = text;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            runSandboxPreview();
+            updateProgressUI();
+        });
+    </script>
+</body>
+</html>
